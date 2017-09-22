@@ -1,0 +1,19 @@
+{
+  "name": "cas_fee_project1",
+  "version": "0.0.1",
+  "description": "FEE project 1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beatfleischli/cas_fee_project1.git"
+  },
+  "author": "Beat Fleischli",
+  "license": "MIT",
+  "homepage": "https://github.com/beatfleischli/cas_fee_project1",
+  "dependencies": {
+    "serve": "^6.1.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
