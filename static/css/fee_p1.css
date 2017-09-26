@@ -12,8 +12,9 @@ label, .deadline, .finished{
     background: #eee;
     display: flex;
     flex-flow: column;
-    width: 900px;
-    margin: 0 auto;
+    max-width: 900px;
+    margin: 10px auto;
+    border-radius: 10px;
 }
 div.schedule{
     display: flex;
@@ -27,6 +28,12 @@ header, footer{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+header{
+    border-radius: 10px 10px 0 0;
+}
+footer{
+    border-radius: 0 0 10px 10px;
 }
 aside, main{
     padding: 5px;
@@ -67,28 +74,27 @@ article > div.action{
     display: flex;
     justify-content: flex-end;
 }
-button.edit{
-    width: 40px;
-    height: 40px;
-    background: #ccc;
-    border-radius: 6px;
-    margin: 4px;
-}
 button.new{
 
 }
-button.filter, button.sort, button.new, select.style{
+button.filter, button.sort, button.new, select.style, button.edit{
     width: 120px;
     height: 25px;
-    backgroud: #ccc;
+    border-radius: 6px;
+    background: #ccc;
 }
 button.new{
     color: red;
+}
+button.edit{
+    width: 40px;
+    height: 40px;
+    margin: 4px;
 }
 select.style{
     background: #fff;
     padding: 2px;
     border: 1px solid darkgrey;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #000;
 }
