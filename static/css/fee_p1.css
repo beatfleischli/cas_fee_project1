@@ -1,0 +1,91 @@
+
+body {
+    color: #222;
+    font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
+    font-size: 80%;
+    margin: 0;
+}
+label, .deadline, .finished{
+    font-size: smaller;
+}
+.page{
+    background: #eee;
+    display: flex;
+    flex-flow: column;
+    width: 900px;
+    margin: 0 auto;
+}
+div.schedule{
+    display: flex;
+    flex-flow: column;
+    padding: 6px;
+}
+header{
+    flex-basis: 3em;
+    background: #ccc;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+span.importance{
+    float: right;
+}
+.menu{
+    flex-basis: 5em;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+.menu_row{
+    display: flex;
+    justify-content: space-between;
+}
+main{
+    display: flex;
+    flex-flow: column;
+}
+article{
+    border: 1px solid gray;
+    border-radius: 4px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+article > div.schedule{
+    flex: 2 2;
+}
+article > div.description{
+    flex: 4 4;
+}
+article > div.action{
+    flex: 1 1;
+    display: flex;
+    justify-content: flex-end;
+}
+button.edit{
+    width: 40px;
+    height: 40px;
+    background: #ccc;
+    border-radius: 6px;
+    margin: 4px;
+}
+button.new{
+
+}
+button.filter, button.sort, button.new, select.style{
+    width: 120px;
+    height: 25px;
+    backgroud: #ccc;
+}
+button.new{
+    color: red;
+}
+select.style{
+    background: #fff;
+    padding: 2px;
+    border: 1px solid darkgrey;
+    border-radius: 4px;
+    color: #000;
+}
