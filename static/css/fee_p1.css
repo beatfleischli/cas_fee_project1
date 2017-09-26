@@ -54,12 +54,12 @@ article{
     border-radius: 4px;
     margin: 5px 0;
     display: flex;
-    justify-content: space-between;
 }
 article > div.schedule{
     flex: 2 2;
 }
 article > div.description{
+    padding-top: 4px;
     flex: 4 4;
 }
 article > div.action{
