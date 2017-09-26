@@ -20,13 +20,16 @@ div.schedule{
     flex-flow: column;
     padding: 6px;
 }
-header{
+header, footer{
     flex-basis: 3em;
     background: #ccc;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+aside, main{
+    padding: 5px;
 }
 span.importance{
     float: right;
