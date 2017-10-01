@@ -11,9 +11,17 @@
   "license": "MIT",
   "homepage": "https://github.com/beatfleischli/cas_fee_project1",
   "dependencies": {
+    "handlebars": "^4.0.10",
     "serve": "^6.1.0"
   },
   "scripts": {
     "start": "node index.js"
+  },
+  "presets": [
+    "env"
+  ],
+  "devDependencies": {
+    "babel-preset-env": "^1.6.0",
+    "gulp": "^3.9.1"
   }
 }

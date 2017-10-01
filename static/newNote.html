@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="./js/fee_p1.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/fee_p1.css">
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
+    <title>CAS_FEE_Project01</title>
+    <script>
+        $( function() {
+            $( "#until" ).datepicker();
+        } );
+    </script>
+</head>
+<body>
+<article class="page">
+    <header class="head"><span>Notes App</span></header>
+    <aside class="menu">
+        <div class="menu_row">
+            <button class="new">New note</button>
+            <div><label for="style">Style</label>
+            <select name="design" id="style" class="style">
+                <option value="simpel">Black&White</option>
+                <option value="fancy">Colored</option>
+            </select></div>
+        </div>
+        <div class="menu_row">
+            <span>
+                <button class="sort">By deadline</button>
+                <button class="sort">By creation</button>
+                <button class="sort">By importance</button>
+            </span>
+            <button class="filter">Show finished</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <form id="note">
+            <div class="form_row">
+                <div class="schedule"><label for="fkey">Key</label></div>
+                <div class="description">{{key}}<input type="hidden" id="fkey" name="key" value="{{key}}"></div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                 <div class="schedule"><label for="ftitle">Title</label></div>
+                 <div class="description"><input type="text" id="ftitle" name="title" value="{$title}"></div>
+                 <div class="action"></div>
+             </div><div class="form_row">
+                 <div class="schedule"><label for="desc">Beschreibung</label></div>
+                 <div class="description"><textarea id="desc" rows="4" cols="50" name="description"></textarea></div>
+                 <div class="action"></div>
+             </div><div class="form_row">
+                 <div class="schedule"><label for="import">Wichtigkeit</label></div>
+                 <div class="description"><input type="text" id="import" name="importance"></div>
+                <div class="action"></div>
+             </div><div class="form_row">
+                 <div class="schedule"><label for="until">Erledigt bis</label></div>
+                 <div class="description"><input type="text" id="until" name="deadline"></div>
+                <div class="action"></div>
+             </div><div class="form_row">
+                <div class="schedule"></div>
+                <div class="bottom"><button class="submit" onclick="save()">Save</button><button class="submit" onclick="cancel()">Cancel</button></div>
+                <div class="action"></div>
+            </div>
+        </form>
+    </main>
+    <footer class="foot"></footer>
+</article>
+
+
+</body>
+</html>
