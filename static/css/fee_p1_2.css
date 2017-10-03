@@ -1,6 +1,6 @@
 
 body {
-    color: #222;
+    color: #fd2;
     font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
     font-size: 80%;
     margin: 0;
@@ -24,7 +24,7 @@ div.schedule{
 }
 header, footer{
     flex-basis: 3em;
-    background: #ccc;
+    background: #79e;
     width: 100%;
     display: flex;
     justify-content: center;
