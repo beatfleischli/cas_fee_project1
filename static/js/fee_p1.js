@@ -1,3 +1,5 @@
+// import Handlebars from "../node_modules/handlebars/dist/handlebars.js"
+
 /*function save(){
     alert('Hello'); exit;
     var noteString = $('#note').serializeArray();
@@ -62,63 +64,62 @@ function s4() {
         .substring(1);
 }
 
+
+
 if('/newNote.html'===page){
 
-note.onsubmit = function(){
- //   alert("Prevent submit");
-    return false;
-}
-
-/*window.onbeforeunload = function() {
-    return false;
-};*/
-
-document.getElementById("style").addEventListener("change", function(){
-    var style = document.getElementById("style").value;
-    if('fancy'===style){
-        changeCSS('./css/fee_p1_2.css',0);
-    }else{
-        changeCSS('./css/fee_p1.css',0);
+    note.onsubmit = function(){
+     //   alert("Prevent submit");
+        return false;
     }
-//    alert(style);
-});
 
-document.getElementById("butCancel").addEventListener("click", function(){
-    alert(key);
-});
+    /*window.onbeforeunload = function() {
+        return false;
+    };*/
 
-document.getElementById("newNote").addEventListener("click", function(){
-    sessionStorage.setItem("currentRecord",null);
-    location.reload();
-});
-
-document.getElementById("butSave").addEventListener("click", function(){
-
-    var noteString = $('#note').serializeArray();
-    var noteArray = {};
-
-    $.map(noteString, function(n, i){
-        noteArray[n['name']] = n['value'];
+    document.getElementById("style").addEventListener("change", function(){
+        var style = document.getElementById("style").value;
+        if('fancy'===style){
+            changeCSS('./css/fee_p1_2.css',0);
+        }else{
+            changeCSS('./css/fee_p1.css',0);
+        }
+    //    alert(style);
     });
-    console.log(JSON.stringify(noteArray));
 
-    localStorage.setItem(key,JSON.stringify(noteArray));
-});
+    document.getElementById("butCancel").addEventListener("click", function(){
+        alert(key);
+    });
+
+    document.getElementById("newNote").addEventListener("click", function(){
+        sessionStorage.setItem("currentRecord",null);
+        location.reload();
+    });
+
+    document.getElementById("butSave").addEventListener("click", function(){
+
+        var noteString = $('#note').serializeArray();
+        var noteArray = {};
+
+        $.map(noteString, function(n, i){
+            noteArray[n['name']] = n['value'];
+        });
+        console.log(JSON.stringify(noteArray));
+
+        localStorage.setItem(key,JSON.stringify(noteArray));
+    });
 
 
 
-var key = sessionStorage.getItem("currentRecord");
-var record = '';
-if(key) {
-    record = localStorage.getItem(key);
-    sessionStorage.setItem("currentRecord",null);
-}else{
-    key = guid();
-}
+    var key = sessionStorage.getItem("currentRecord");
+    var record = '';
+    if(key) {
+        record = localStorage.getItem(key);
+        sessionStorage.setItem("currentRecord",null);
+    }else{
+        key = guid();
+    }
 
-
-if(false){
-}
 
 }else{
 //    alert('page index');
@@ -134,10 +135,13 @@ if(false){
         var notes = '';
 
         for(var i=0;i<localStorage.length;i++){
-            record=localStorage.getItem(localStorage.key(i));
-            alert(record);
+            record=JSON.parse(localStorage.getItem(localStorage.key(i)));
+            record.summary=record.description.substr(0,15);
+            console.log(record);
+         //   alert(record);
+
             notes += templateComp(record);
-            alert(notes);
+          //  alert(notes);
         }
 
         // Add the compiled html to the page
