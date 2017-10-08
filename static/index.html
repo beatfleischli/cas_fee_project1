@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="./css/fee_p1.css">
     <title>CAS_FEE_Project01</title>
-    <script id="note-template" type="text/x-handlebars-template">
+    <script id="notesListTemplate" type="text/x-handlebars-template">
+        {{#each this}}
         <article class="note">
             <div class="schedule">
                 <div class="deadline">{{deadline}}</div>
@@ -22,73 +23,83 @@
                 <button class="edit" onclick="edit({{key}})">Edit</button>
             </div>
         </article>
+        {{/each}}
     </script>
+    <script id="noteEditTemplate" type="text/x-handlebars-template">
+        <form id="note">
+            <div class="form_row">
+                <div class="schedule"><label>Key</label></div>
+                <div class="description">{{key}}</div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                <div class="schedule"><label for="ftitle">Title</label></div>
+                <div class="description"><input type="text" id="ftitle" name="title" value="{$title}"></div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                <div class="schedule"><label for="desc">Beschreibung</label></div>
+                <div class="description"><textarea id="desc" rows="4" cols="50" name="description"></textarea></div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                <div class="schedule"><label for="import">Wichtigkeit</label></div>
+                <div class="description"><input type="text" id="import" name="importance"></div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                 <div class="schedule"><label for="until">Erledigt bis</label></div>
+                <div class="description"><input type="text" id="until" name="deadline"></div>
+                <div class="action"></div>
+            </div><div class="form_row">
+                <div class="schedule"></div>
+                <div class="bottom"><button class="decide" id="butSave" value="Save">Save</button><button class="decide" id="butCancel" >Cancel</button></div>
+                <div class="action"></div>
+            </div>
+        </form>
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="./js/handlebars-v4.0.10.js"></script>
     <!--<script src="./js/handlebars-v4.0.10.js"></script>-->
 </head>
 <body>
 <div class="page">
     <header class="head"><span>Notes App</span></header>
-    <aside class="menu">
+    <aside class="menu" id="aside">
         <div class="menu_row">
             <button class="new">New note</button>
             <div><label for="style">Style</label>
                 <select name="design" id="style" class="style">
                     <option value="simpel">Black&White</option>
                     <option value="fancy">Colored</option>
-                </select></div>
+                </select>
+            </div>
         </div>
         <div class="menu_row">
-     <span>
-    <button class="sort">By deadline</button>
-    <button class="sort">By creation</button>
-    <button class="sort">By importance</button></span>
+             <span>
+                <button class="sort">By deadline</button>
+                <button class="sort">By creation</button>
+                <button class="sort">By importance</button>
+             </span>
             <button class="filter">Show finished</button>
         </div>
     </aside>
 
-    <main class="main">
-
-        <article class="note">
-            <div class="schedule">
-                <div class="deadline">Nächsten Mittwoch</div>
-                <div class="finished">&#9745; Finished [Today]</div>
-            </div>
-            <div class="description">
-                <span>CAS FEE Selbststudium / Projekt Aufgabe erledigen</span>
-                <span class="importance">&#9733;&#9733;</span>
-                <details>
-                    <summary class="title">Lorem, ipsum dolor sit amet consectetur adipisicing elit...</summary>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, consequuntur suscipit dignissimos quaerat quis accusantium consectetur in sed impedit accusamus blanditiis molestiae atque error fuga modi vel architecto a omnis earum reiciendis nihil tempora neque! Obcaecati repellat accusamus magnam repudiandae.</p>
-                </details>
-            </div>
-            <div class="action">
-                <button class="edit">Edit</button>
-            </div>
-        </article>
-
-
-        <article class="note">
-            <div class="schedule">
-                <div class="deadline">Irgendwann</div>
-                <div class="finished">&#9744; Finished</div>
-            </div>
-            <div class="description">
-                <span>Büro aufräumen</span>
-                <span class="importance">&#9733;&#9733;</span>
-                <details>
-                    <summary class="title">Details folgen...</summary>
-                    <p>Empty</p>
-                </details>
-            </div>
-            <div class="action">
-                <button class="edit">Edit</button>
-            </div>
-        </article>
+    <main class="main" id="main">
 
     </main>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="./js/fee_p1.js"></script>
+    <script src="./js/notesModel.js"></script>
+    <script src="./js/notesView.js"></script>
+    <script src="./js/notesController.js"></script>
+
+    <script>
+        window.onload = function () {
+            notesController.bootstrap(
+                notesModel,
+                notesView,
+                document.getElementById('aside'),
+                document.getElementById('main')
+            )
+        }
+    </script>
     <footer class="foot"></footer>
 </div>
 
