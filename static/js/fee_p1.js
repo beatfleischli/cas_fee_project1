@@ -15,7 +15,7 @@
     return false;
 }*/
 // alert("Hello");
-var page = window.location.href.substr(window.location.href.lastIndexOf('/'));
+var page = window.location.href.substr(window.location.href.lastIndexOf('/')).split('.html')[0];
 //alert(window.location.href.substr(window.location.href.lastIndexOf('/')));
 
 function cancel(){
@@ -66,7 +66,7 @@ function s4() {
 
 
 
-if('/newNote.html'===page){
+if('/newNote'===page){
 
     note.onsubmit = function(){
      //   alert("Prevent submit");
@@ -106,7 +106,12 @@ if('/newNote.html'===page){
         });
         console.log(JSON.stringify(noteArray));
 
-        localStorage.setItem(key,JSON.stringify(noteArray));
+        var notesData = {};
+        notesData = JSON.parse(localStorage.getItem('notesData'));
+        notesData[key]=noteArray;
+        console.log(JSON.stringify(notesData));
+
+        localStorage.setItem('notesData',JSON.stringify(notesData));
     });
 
 
@@ -134,14 +139,20 @@ if('/newNote.html'===page){
         // Define our data object
         var notes = '';
 
-        for(var i=0;i<localStorage.length;i++){
-            record=JSON.parse(localStorage.getItem(localStorage.key(i)));
-            record.summary=record.description.substr(0,15);
-            console.log(record);
-         //   alert(record);
+        var notesData = JSON.parse(localStorage.getItem('notesData'));
 
-            notes += templateComp(record);
-          //  alert(notes);
+        if(notesData){
+            for(var property in notesData){
+                if (notesData.hasOwnProperty(property)){
+                    record=notesData[property];
+                    record.summary=record.description.substr(0,15);
+                    console.log(record);
+                 //   alert(record);
+
+                    notes += templateComp(record);
+                  //  alert(notes);
+                }
+            }
         }
 
         // Add the compiled html to the page
