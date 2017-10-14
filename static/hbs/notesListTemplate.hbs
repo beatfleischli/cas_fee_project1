@@ -1,0 +1,19 @@
+{{#each this}}
+    <article class="note">
+        <div class="schedule">
+            <div class="deadline">{{deadline}}</div>
+            <div class="finished">{{finished}}</div>
+        </div>
+        <div class="description">
+            <span>{{title}}</span>
+            <span class="importance">{{importance}}</span>
+            <details>
+                <summary class="title">{{summary}}</summary>
+                <p>{{description}}</p>
+            </details>
+        </div>
+        <div class="action">
+            <button class="edit" onclick="edit({{key}})">Edit</button>
+        </div>
+    </article>
+{{/each}}

@@ -14,5 +14,8 @@ const notesModel={
     },
     getNote: function (index) {
         return this.notes[index];
+    },
+    getAllNotes: function () {
+        return this.notes;
     }
 }

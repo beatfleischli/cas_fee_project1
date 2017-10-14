@@ -8,26 +8,41 @@ const notesController = {
     bootstrap: function (model,view,asideEl,mainEl) {
         this.model = model;
         this.view = view;
-        this.out = mainEl;
-        this.currentView = location.hash || "#listNotes";
+        this.view.out = mainEl;
+        if(!location.hash ) location.hash = "#list";
         asideEl.addEventListener('click',notesController.asideEvent);
+        asideEl.addEventListener('change',notesController.asideEvent);
         mainEl.addEventListener('click',notesController.mainEvent);
-        this.renderUI();
+        this.dispatch();
     },
-    renderUI: function () {
-        switch (this.currentView) {
-        case "#edit":
+    dispatch: function () {
+        var params = location.hash.substr(1).split('_');
+        var action = params[0];
+        var detail = params[1];
+
+        switch (action) {
+        case "edit":
             this.view.renderEdit(this.out);
             break;
-        case "#new":
+        case "add":
             this.view.renderEdit(this.out);
             break;
-        case "#list":
+        case "list":
             this.view.renderList(this.out);
             break;
         default:
             this.view.renderError(this.out);
             break;
         }
+    },
+    addNote: function () {
+
+    },
+    editNote: function () {
+
+    },
+    listNotes: function () {
+        var notes = this.model.getAllNotes();
+        this.view.renderList(notes);
     }
 }
