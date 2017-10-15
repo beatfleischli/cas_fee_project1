@@ -1,11 +1,18 @@
+'useStrict'
+
 const notesView = {
-    renderList: function (out, notesList) {
+    noteTempls: [],
+    renderList: function (notesList) {
         notesTemplateText=$('#notesListTemplate').html();
+        createNotesHtml = Handlebars.compile (notesTemplateText);
+        this.out.innerHTML = createNotesHtml(notesList);
     },
-    renderEdit: function (out, note) {
+    renderEdit: function (note) {
         noteTemplateText=$('#noteEditTemplate').html();
+        createNoteHtml = Handlebars.compile (noteTemplateText);
+        this.out.innerHTML = createNoteHtml(note);
     },
-    renderError: function (out) {
-        out.innerHTML = "Sorry, we couldn't understand your request!"
+    renderError: function (message) {
+        this.out.innerHTML = message || "Sorry, we couldn't understand your request!"
     }
 }

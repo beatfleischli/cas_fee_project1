@@ -5,7 +5,7 @@ body {
     font-size: 80%;
     margin: 0;
 }
-label, .deadline, .finished{
+label, .due, .finished{
     font-size: smaller;
 }
 .page{
@@ -73,7 +73,7 @@ form{
 input, textarea{
     width: 100%;
 }
-input#until{
+input#due{
     width: 120px;
 }
 div.description,div.bottom{
@@ -89,7 +89,7 @@ div.action{
     display: flex;
     justify-content: flex-end;
 }
-button.filter, button.sort, button.new, select.style, button.edit, button.decide{
+button.filter, button.sort, button.new, select.style, button.edit, button.saveOrCancel{
     width: 125px;
     height: 25px;
     border-radius: 6px;
@@ -98,7 +98,7 @@ button.filter, button.sort, button.new, select.style, button.edit, button.decide
 button.new{
     color: red;
 }
-button.decide{
+button.saveOrCancel{
     color: darkred;
     margin: 10px;
 }

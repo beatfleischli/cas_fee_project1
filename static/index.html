@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="./css/fee_p1.css">
-    <title>CAS_FEE_Project01</title>
+    <title>CAS_FEE_Project01_singlePage</title>
     <script id="notesListTemplate" type="text/x-handlebars-template">
         {{#each this}}
         <article class="note">
             <div class="schedule">
-                <div class="deadline">{{deadline}}</div>
+                <div class="due">{{due}}</div>
                 <div class="finished">{{finished}}</div>
             </div>
             <div class="description">
-                <span>{{title}}</span>
+                <span>{{caption}}</span>
                 <span class="importance">{{importance}}</span>
                 <details>
                     <summary class="title">{{summary}}</summary>
@@ -20,7 +20,7 @@
                 </details>
             </div>
             <div class="action">
-                <button class="edit" onclick="edit({{key}})">Edit</button>
+                <button class="edit" data-key="{{key}}">Edit</button>
             </div>
         </article>
         {{/each}}
@@ -28,28 +28,29 @@
     <script id="noteEditTemplate" type="text/x-handlebars-template">
         <form id="note">
             <div class="form_row">
-                <div class="schedule"><label>Key</label></div>
-                <div class="description">{{key}}</div>
+                <div class="schedule"><label for="key">Key</label></div>
+                <div class="description">{{key}}<input type="hidden" id="key" name="title" value="{{key}}"></div>
                 <div class="action"></div>
             </div><div class="form_row">
-                <div class="schedule"><label for="ftitle">Title</label></div>
-                <div class="description"><input type="text" id="ftitle" name="title" value="{$title}"></div>
+                <div class="schedule"><label for="caption">Title</label></div>
+                <div class="description"><input type="text" id="caption" name="title" value="{{caption}}"></div>
                 <div class="action"></div>
             </div><div class="form_row">
                 <div class="schedule"><label for="desc">Beschreibung</label></div>
-                <div class="description"><textarea id="desc" rows="4" cols="50" name="description"></textarea></div>
+                <div class="description"><textarea id="desc" rows="4" cols="50" name="description">{{description}}</textarea></div>
                 <div class="action"></div>
             </div><div class="form_row">
-                <div class="schedule"><label for="import">Wichtigkeit</label></div>
-                <div class="description"><input type="text" id="import" name="importance"></div>
+                <div class="schedule"><label for="importance">Wichtigkeit</label></div>
+                <div class="description"><input type="number" id="importance" value="{{importance}}"></div>
                 <div class="action"></div>
             </div><div class="form_row">
-                 <div class="schedule"><label for="until">Erledigt bis</label></div>
-                <div class="description"><input type="text" id="until" name="deadline"></div>
+                 <div class="schedule"><label for="due">Erledigt bis</label></div>
+                <div class="description"><input type="date" id="due" name="due" value="{{due}}">
+                    <input type="hidden" id="created" value="{{created}}"></div>
                 <div class="action"></div>
             </div><div class="form_row">
                 <div class="schedule"></div>
-                <div class="bottom"><button class="decide" id="butSave" value="Save">Save</button><button class="decide" id="butCancel" >Cancel</button></div>
+                <div class="bottom"><button class="saveOrCancel" data-key="save">Save</button><button class="saveOrCancel" data-key="cancel" >Cancel</button></div>
                 <div class="action"></div>
             </div>
         </form>
@@ -57,7 +58,6 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="./js/handlebars-v4.0.10.js"></script>
-    <!--<script src="./js/handlebars-v4.0.10.js"></script>-->
 </head>
 <body>
 <div class="page">
@@ -74,11 +74,11 @@
         </div>
         <div class="menu_row">
              <span>
-                <button class="sort">By deadline</button>
-                <button class="sort">By creation</button>
-                <button class="sort">By importance</button>
+                <button class="sort" data-key="due">By deadline</button>
+                <button class="sort" data-key="created">By creation</button>
+                <button class="sort" data-key="importance">By importance</button>
              </span>
-            <button class="filter">Show finished</button>
+            <button class="filter" data-key="finished">Show finished</button>
         </div>
     </aside>
 
