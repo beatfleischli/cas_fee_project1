@@ -5,7 +5,7 @@ body {
     font-size: 80%;
     margin: 0;
 }
-label, .due, .finished{
+label, .due {
     font-size: smaller;
 }
 .page{
@@ -40,7 +40,24 @@ aside, main{
     padding: 5px;
 }
 span.importance{
+    display: inline-block;
+}
+span.importance > span{
+    position: relative;
+    display: inline-block;
+}
+span.right{
     float: right;
+}
+span.active::before{
+    position: absolute;
+    left:0;
+    content: '\2605';
+    transform: scale(1.3);
+    color: darkred;
+}
+span.importance > span::after{
+    content: '\2606';
 }
 .menu{
     flex-basis: 5em;
@@ -50,6 +67,8 @@ span.importance{
     margin-top: 15px;
 }
 .menu_row{
+    display: flex;
+    justify-content: space-between;
     display: flex;
     justify-content: space-between;
 }
@@ -73,6 +92,11 @@ form{
 input, textarea{
     width: 100%;
 }
+input[type="checkbox"]{
+    float: left;
+    width: 10%;
+    margin: 1px 0 0 -2px;
+}
 input#due{
     width: 120px;
 }
@@ -88,6 +112,9 @@ div.action{
     flex: 1 1;
     display: flex;
     justify-content: flex-end;
+}
+div.finished{
+    padding: 2px 0;
 }
 button.filter, button.sort, button.new, select.style, button.edit, button.saveOrCancel{
     width: 125px;
