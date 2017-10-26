@@ -69,8 +69,6 @@ span.importance > span::after{
 .menu_row{
     display: flex;
     justify-content: space-between;
-    display: flex;
-    justify-content: space-between;
 }
 main{
     display: flex;

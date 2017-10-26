@@ -1,6 +1,6 @@
 
 body {
-    color: #fd2;
+    color: #b42;
     font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
     font-size: 80%;
     margin: 0;
@@ -9,7 +9,7 @@ label, .due, .finished{
     font-size: smaller;
 }
 .page{
-    background: #eee;
+    background: #acf;
     display: flex;
     flex-flow: column;
     max-width: 900px;
@@ -24,7 +24,7 @@ div.schedule{
 }
 header, footer{
     flex-basis: 3em;
-    background: #79e;
+    background: #57b;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -40,7 +40,24 @@ aside, main{
     padding: 5px;
 }
 span.importance{
+    display: inline-block;
+}
+span.importance > span{
+    position: relative;
+    display: inline-block;
+}
+span.right{
     float: right;
+}
+span.active::before{
+    position: absolute;
+    left:0;
+    content: '\2605';
+    transform: scale(1.3);
+    color: #a21;
+}
+span.importance > span::after{
+    content: '\2606';
 }
 .menu{
     flex-basis: 5em;
@@ -73,6 +90,11 @@ form{
 input, textarea{
     width: 100%;
 }
+input[type="checkbox"]{
+    float: left;
+    width: 10%;
+    margin: 1px 0 0 -2px;
+}
 input#due{
     width: 120px;
 }
@@ -89,17 +111,21 @@ div.action{
     display: flex;
     justify-content: flex-end;
 }
+div.finished{
+    padding: 2px 0;
+}
 button.filter, button.sort, button.new, select.style, button.edit, button.saveOrCancel{
     width: 125px;
     height: 25px;
     border-radius: 6px;
-    background: #ccc;
+    background: #8ad;
+    color: #844;
 }
 button.new{
-    color: red;
+    color: #b44;
 }
 button.saveOrCancel{
-    color: darkred;
+    color: #844;
     margin: 10px;
 }
 button.edit{

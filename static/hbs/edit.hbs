@@ -1,0 +1,39 @@
+<form id="note" onsubmit="return (function(event){return false;})(event);">
+    <div class="form_row">
+        <div class="schedule"><label for="key">Key</label></div>
+        <div class="description">{{key}}<input type="hidden" id="key" name="title" value="{{key}}"></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="caption">Title</label></div>
+        <div class="description"><input type="text" id="caption" name="title" value="{{caption}}"></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="desc">Beschreibung</label></div>
+        <div class="description"><textarea id="desc" rows="4" cols="50" name="description">{{description}}</textarea></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="importance">Wichtigkeit</label></div>
+        <div class="description"><span class="importance">{{{renderImportance importance}}}</span>
+            <input type="hidden" id="importance" value="{{importance}}"></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="due">Erledigt bis</label></div>
+        <div class="description"><input type="date" id="due" name="due" value="{{due}}">
+            <input type="hidden" id="created" value="{{created}}"></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="finished">Abgeschlossen</label></div>
+        <div class="description"><input type="checkbox" id="finished"  class="setfin" name="finished" {{{renderFinished finished}}}></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"><label for="finishedOn">Abgeschlossen am</label></div>
+        <div class="description"><input type="date" id="finishedOn"  class="setfin" value="{{finishedOn}}"></div>
+        <div class="action"></div>
+    </div><div class="form_row">
+        <div class="schedule"></div>
+        <div class="bottom"><button class="saveOrCancel" data-key="save">Save</button>
+            <button class="saveOrCancel" data-key="cancel" >Cancel</button>
+            <button class="saveOrCancel" data-key="delete" >Delete</button></div>
+        <div class="action"></div>
+    </div>
+</form>

@@ -1,0 +1,20 @@
+{{#each this}}
+    <article class="note">
+        <div class="schedule">
+            <div class="due">{{due}}</div>
+            <div class="finished"><input id="finished_{{key}}" type="checkbox" {{{renderFinished finished}}} class="setfin">
+                <label for="finished_{{key}}">Finished{{{renderFinishedOn finishedOn}}}</label></div>
+        </div>
+        <div class="description">
+            <span>{{caption}}</span>
+            <span class="importance right">{{{renderImportance importance}}}</span>
+            <details>
+                <summary class="title">{{summary}}</summary>
+                <p>{{description}}</p>
+            </details>
+        </div>
+        <div class="action">
+            <button class="edit" data-key="{{key}}">Edit</button>
+        </div>
+    </article>
+{{/each}}

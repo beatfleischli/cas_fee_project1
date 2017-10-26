@@ -1,18 +1,37 @@
 'useStrict'
 
 const notesView = {
-    noteTempls: [],
+    noteTemplates: [],
+    loadTemplate: function (path,callback) {
+        var request = new XMLHttpRequest();
+
+        request.onload = function () {
+            callback(request.responseText);
+        };
+
+        request.open("GET",path);
+        request.send(null);
+    },
     renderList: function (notesList) {
         notesTemplateText=$('#notesListTemplate').html();
         createNotesHtml = Handlebars.compile (notesTemplateText);
         this.out.innerHTML = createNotesHtml(notesList);
     },
-    renderEdit: function (note) {
-        noteTemplateText=$('#noteEditTemplate').html();
-        createNoteHtml = Handlebars.compile (noteTemplateText);
-        this.out.innerHTML = createNoteHtml(note);
-        this.setOnsubmit('note','off');
-
+    renderPage: function (page,content) {
+        if(this.noteTemplates[page]){
+            this.renderTemplate(this.noteTemplates[page],content);
+  //          this.setOnsubmit('note','off');
+        }else{
+            this.loadTemplate('hbs/'+page+'.hbs',(function (template) {
+                this.noteTemplates[page] = template;
+                this.renderTemplate(template,content);
+  //              this.setOnsubmit('note','off');
+            }).bind(this));
+        }
+    },
+    renderTemplate: function (template,content) {
+        createNoteHtml = Handlebars.compile (template);
+        this.out.innerHTML = createNoteHtml(content);
     },
     renderError: function (message) {
         this.out.innerHTML = message || "Sorry, we couldn't understand your request!"
@@ -25,8 +44,17 @@ const notesView = {
     renderFinished: function (checked) {
         document.getElementById('finished').checked = checked;
     },
-    renderFinishedOn: function (date) {
-        document.getElementById('finishedOn').value = date;
+    renderFinishedOn: function (elId,newDate) {
+        if("finished"===elId) {
+            var date = document.getElementById('finishedOn').value;
+            if (!this.isValidDate(date)) {
+                document.getElementById('finishedOn').value = newDate;
+            }
+        }else{
+            var date = newDate || '-';
+            document.querySelectorAll('[for="'+elId+'"]')[0].innerHTML = "Finished ["+ date + "]";
+     //       document.getElementById(elId).innerHTML = "Finished ["+ newDate + "]";
+        }
     },
     getHtmlImportance: function (importance) {
         var active = parseInt(importance);
@@ -52,6 +80,11 @@ const notesView = {
                 return false;
             }
         }
+    },
+    isValidDate: function (date) {
+        var p = date.split('/');
+        var d = new Date(p[2], p[1] - 1, p[0]);
+        return d && ((d.getMonth() + 1) === p[1]) && (d.getYear()===p[0]);
     },
     init: function () {
 /*        Handlebars.registerHelper('renderImportance', function (importance) {

@@ -28,10 +28,9 @@ const notesController = {
                 location.hash = newHash+'_'+butKey;
                 break;
             case "setimp":
-                notesController.setImportance(e);
-                break;
-            case "setfin":
-                notesController.setFinished(e);
+                if('#list'!==location.hash) {
+                    notesController.setImportance(e);
+                }
                 break;
         }
     },
@@ -46,6 +45,9 @@ const notesController = {
         switch (butClass){
             case "style":
                 this.setStyle(butNewVal);
+                break;
+            case "setfin":
+                this.setFinished(e,butNewVal);
                 break;
         }
     },
@@ -67,6 +69,7 @@ const notesController = {
         asideEl.addEventListener('click',notesController.eventClick);
         asideEl.addEventListener('change',notesController.eventChange.bind(this));
         mainEl.addEventListener('click',notesController.eventClick.bind(this));
+        mainEl.addEventListener('change',notesController.eventChange.bind(this));
         window.addEventListener("hashchange",notesController.dispatch.bind(this));
 //        window.addEventListener("popstate",notesController.eventPop.bind(this));
         this.view.init();
@@ -102,17 +105,11 @@ const notesController = {
     },
     addNote: function () {
         var note = this.model.getEmptyNote();
-        this.view.renderEdit(note);
+        this.view.renderPage('edit',note);
     },
     editNote: function (key) {
         var note = this.model.getNote(key);
-        note["key"]=key;
-        this.view.renderEdit(note);
-
-/*        $("form").submit(function(e){
-            alert('submit intercepted');
-            e.preventDefault(e);
-        });*/
+        this.view.renderPage('edit',note);
     },
     listNotes: function (sortBy,filter) {
         var notesData = this.model.getAllNotes(sortBy,filter);
@@ -120,7 +117,7 @@ const notesController = {
         if(1>notesData.length){
             location.hash = '#new';
         }else {
-            this.view.renderList(notesData);
+            this.view.renderPage('list',notesData);
         }
     },
     saveOrCancel: function (doWhat) {
@@ -136,8 +133,25 @@ const notesController = {
     showMessage: function (string) {
         this.view.renderError(string)
     },
-    setStyle: function () {
-        this.showMessage('Style successfully changed.');
+    setStyle: function (style) {
+
+        var cssFile,
+            cssLinkIndex = 0;
+
+        if('fancy'===style){
+            cssFile = './css/fee_p1_2.css';
+        }else{
+            cssFile = './css/fee_p1.css';
+        }
+
+        var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+
+        var newlink = document.createElement("link");
+        newlink.setAttribute("rel", "stylesheet");
+        newlink.setAttribute("type", "text/css");
+        newlink.setAttribute("href", cssFile);
+
+        document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
     },
     setImportance: function (e) {
         var newimp = e.target.dataset.index;
@@ -145,33 +159,33 @@ const notesController = {
         this.view.renderImportance(newimp);
         console.log(newimp);
     },
-    setFinished: function (e) {
-        var target = e.target;
+    setFinished: function (e,newDate) {
+        console.log(e.target.id);
         if(e.target.type === 'checkbox'){
             var date='';
             if(e.target.checked===true){
                 date = this.getDate('',true);
             }
-            this.view.renderFinishedOn(date);
-            console.log('checkbox')
+            if(-1<e.target.id.indexOf('_')) {
+                var id = e.target.id.split('_')[1];
+                this.model.setFinished(id, date);
+            }
+            this.view.renderFinishedOn(e.target.id,date);
         }else if(e.target.type === 'date'){
-            console.log('date')
+  //          console.log('setfin - date')
+            if(newDate){
+                this.view.renderFinished(true);
+            }else{
+                this.view.renderFinished(false);
+            }
         }
-        console.log(e.target);
     },
     getDate: function (delta,reverse) {
         var delta = delta || 0;
         var newDate = new Date(Date.now()+delta*1000*3600*24);
-        var dd = newDate.getDate();
-        var mm = newDate.getMonth()+1; //January is 0!
-
+        var dd = ("0"+newDate.getDate()).slice(-2);
+        var mm = ("0"+(newDate.getMonth()+1)).slice(-2);
         var yyyy = newDate.getFullYear();
-        if(dd<10){
-            dd='0'+dd;
-        }
-        if(mm<10){
-            mm='0'+mm;
-        }
 
         if(reverse){
             return yyyy+'-'+mm+'-'+dd;

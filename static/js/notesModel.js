@@ -19,6 +19,16 @@ const notesModel={
         this.notes[key] = note["value"];
         this.writeNotes();
     },
+    setFinished: function (key,date) {
+        if(date){
+            this.notes[key].finished=true;
+            this.notes[key].finishedOn=date;
+        }else{
+            this.notes[key].finished=false;
+            this.notes[key].finishedOn='';
+        }
+        this.writeNotes();
+    },
     deleteNote: function (note) {
         if (note["key"]!=="_undefined"){
             this.notes[note["key"]] = undefined;
@@ -78,9 +88,10 @@ const notesModel={
         return newNotes;
     },
     sortNotes: function (sortBy) {
-        var array = $.map(this.notes, function(value, index) {
+/*        var array = $.map(this.notes, function(value, index) {
             return [value];
-        });
+        });*/
+        var array = this.objectToArray(this.notes);
         switch(sortBy){
             case 'due':
                 array.sort(function(a,b){
@@ -115,14 +126,12 @@ const notesModel={
         }
         return array;
     },
-    completeProps: function (notesData) {
-        for(var property in notesData){
-            if (notesData.hasOwnProperty(property)){
-                notesData[property].key=property;
-                notesData[property].summary=(notesData[property].description).substr(0,15)+'...';
-            }
+    objectToArray: function (object) {
+        var array = [];
+        for(var notes in object){
+            array.push(object[notes]);
         }
-        return notesData;
+        return array;
     },
     guid: function () {
     return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
@@ -147,7 +156,8 @@ const notesModel={
             "due": formElement.elements["due"].value,
             "created": created,
             "finished": formElement.elements["finished"].checked,
-            "finishedOn": formElement.elements["finishedOn"].value
+            "finishedOn": formElement.elements["finishedOn"].value,
+            "key": key
         };
 
         return note;
