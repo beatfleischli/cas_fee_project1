@@ -1,4 +1,4 @@
-'useStrict'
+'use strict'
 
 const notesModel={
     maxImportance: 5,
@@ -12,7 +12,7 @@ const notesModel={
     setNote: function (note) {
         var key;
         if (note["key"]==="_undefined"){
-            key = this.guid();
+            key = utils.getNewGuid();
         }else{
             key = note["key"];
         }
@@ -132,34 +132,5 @@ const notesModel={
             array.push(object[notes]);
         }
         return array;
-    },
-    guid: function () {
-    return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
-        this.s4() + '-' + this.s4() + this.s4() + this.s4();
-    },
-    s4: function () {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    },
-    serializeForm: function (formElement) {
-//        alert(formElement.elements["key"].value);
-        var key = formElement.elements["key"].value || "_undefined",
-            created = formElement.elements["created"].value || new Date(),
-            note = [];
-        note["key"] = key;
-        note["value"] = {
-            "caption": formElement.elements["caption"].value,
-            "description": formElement.elements["description"].value,
-            "summary": formElement.elements["description"].value.substr(0, 15) + '...',
-            "importance": formElement.elements["importance"].value,
-            "due": formElement.elements["due"].value,
-            "created": created,
-            "finished": formElement.elements["finished"].checked,
-            "finishedOn": formElement.elements["finishedOn"].value,
-            "key": key
-        };
-
-        return note;
     }
 }

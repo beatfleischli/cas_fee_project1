@@ -23,17 +23,17 @@
         <div class="action"></div>
     </div><div class="form_row">
         <div class="schedule"><label for="finished">Abgeschlossen</label></div>
-        <div class="description"><input type="checkbox" id="finished"  class="setfin" name="finished" {{{renderFinished finished}}}></div>
+        <div class="description"><input type="checkbox" id="finished"  data-change="setFinished"  name="finished" {{{renderFinished finished}}}></div>
         <div class="action"></div>
     </div><div class="form_row">
         <div class="schedule"><label for="finishedOn">Abgeschlossen am</label></div>
-        <div class="description"><input type="date" id="finishedOn"  class="setfin" value="{{finishedOn}}"></div>
+        <div class="description"><input type="date" id="finishedOn"  data-change="setFinished"  value="{{finishedOn}}"></div>
         <div class="action"></div>
     </div><div class="form_row">
         <div class="schedule"></div>
-        <div class="bottom"><button class="saveOrCancel" data-key="save">Save</button>
-            <button class="saveOrCancel" data-key="cancel" >Cancel</button>
-            <button class="saveOrCancel" data-key="delete" >Delete</button></div>
+        <div class="bottom"><button class="saveOrCancel" data-action="saveOrCancel" data-key="save" data-hide="true">Save</button>
+            <button class="saveOrCancel"  data-action="saveOrCancel" data-key="cancel" data-hide="true">Cancel</button>
+            <button class="saveOrCancel"  data-action="saveOrCancel" data-key="delete" data-hide="true">Delete</button></div>
         <div class="action"></div>
     </div>
 </form>

@@ -13,9 +13,9 @@
     <header class="head"><span>Notes App</span></header>
     <aside class="menu" id="aside">
         <div class="menu_row">
-            <button class="new">New note</button>
+            <button class="new" data-action="add">New note</button>
             <div><label for="style">Style</label>
-                <select name="design" id="style" class="style">
+                <select name="design" id="style" data-change="setStyle">
                     <option value="simpel">Black&White</option>
                     <option value="fancy">Colored</option>
                 </select>
@@ -23,11 +23,11 @@
         </div>
         <div class="menu_row">
              <span>
-                <button class="sort" data-key="due">By deadline</button>
-                <button class="sort" data-key="created">By creation</button>
-                <button class="sort" data-key="importance">By importance</button>
+                <button class="sort" data-action="sort" data-key="due">By deadline</button>
+                <button class="sort" data-action="sort" data-key="created">By creation</button>
+                <button class="sort" data-action="sort" data-key="importance">By importance</button>
              </span>
-            <button class="filter" data-key="finished">Show finished</button>
+            <button class="filter" data-action="filter" data-key="finished">Show finished</button>
         </div>
     </aside>
 
@@ -35,6 +35,8 @@
 
     </main>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="./js/requests.js"></script>
+    <script src="./js/utils.js"></script>
     <script src="./js/notesModel.js"></script>
     <script src="./js/notesView.js"></script>
     <script src="./js/notesController.js"></script>

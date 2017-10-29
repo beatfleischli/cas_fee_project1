@@ -1,54 +1,39 @@
-'useStrict'
+'use strict'
 
 const notesController = {
     eventClick: function (e) {
         var butClass = e.target.classList[0],
             butKey = e.target.dataset.key,
+            action = e.target.dataset.action,
+            hide = e.target.dataset.hide || false,
             newHash = '#'+butClass;
 
         console.log(butClass);
         console.log(butKey);
 
-        switch (butClass){
-            case "new":
-                location.hash = newHash;
-                break;
-            case "edit":
-                location.hash = newHash+'_'+butKey;
-                break;
-            case "sort":
-            case "filter":
-                if(location.hash===newHash+'_'+butKey){
-                    notesController.dispatch();
-                }else {
-                    location.hash = newHash + '_' + butKey;
+        if(action){
+            if(hide){
+                notesController[action](butKey);
+            }else {
+                var arg = '';
+                if (butKey) {
+                    arg = "_" + butKey;
                 }
-                break;
-            case "saveOrCancel":
-                location.hash = newHash+'_'+butKey;
-                break;
-            case "setimp":
-                if('#list'!==location.hash) {
-                    notesController.setImportance(e);
-                }
-                break;
+                location.hash = "#" + action + arg;
+            }
         }
     },
     eventChange: function (e) {
         var butClass = e.target.classList[0],
             butNewVal = e.target.value,
-            newHash = '#'+butClass;
+            change = e.target.dataset.change;
 
         console.log(butClass);
         console.log(butNewVal);
 
-        switch (butClass){
-            case "style":
-                this.setStyle(butNewVal);
-                break;
-            case "setfin":
-                this.setFinished(e,butNewVal);
-                break;
+
+        if(change) {
+            notesController[change](e);
         }
     },
     eventPop: function (e){
@@ -82,50 +67,55 @@ const notesController = {
         var detail = params[1];
 
         switch (action) {
-        case "edit":
-            this.editNote(detail);
-            break;
-        case "new":
-            this.addNote();
-            break;
-        case "list":
-        case "sort":
-            this.listNotes(detail);
-            break;
-        case "saveOrCancel":
-            this.saveOrCancel(detail);
-            break;
-        case "filter":
-            this.listNotes(false,detail);
-            break;
-        default:
-            this.showMessage("Action could not be found");
-            break;
+            case "edit":
+            case "add":
+            case "list":
+            case "sort":
+                this[action](detail);
+                break;
+            case "saveOrCancel":
+                this.saveOrCancel(detail);
+                break;
+            case "filter":
+                this[action](detail);
+                break;
+            default:
+                this.showMessage("Action could not be found");
+                break;
         }
     },
-    addNote: function () {
+    add: function () {
         var note = this.model.getEmptyNote();
         this.view.renderPage('edit',note);
     },
-    editNote: function (key) {
+    edit: function (key) {
         var note = this.model.getNote(key);
+/*        if(note.key==="_undefined"){
+            note.key = key;
+        }*/
         this.view.renderPage('edit',note);
     },
-    listNotes: function (sortBy,filter) {
+    filter: function(filter) {
+        this.list(false,filter);
+    },
+    sort: function (sort){
+        this.list(sort);
+    },
+    list: function (sortBy,filter) {
         var notesData = this.model.getAllNotes(sortBy,filter);
 //        this.view.renderList(this.model.completeProps(notesData));
         if(1>notesData.length){
-            location.hash = '#new';
+            location.hash = '#add';
         }else {
             this.view.renderPage('list',notesData);
         }
     },
     saveOrCancel: function (doWhat) {
         if('save'=== doWhat){
-            var note = this.model.serializeForm(document.getElementById('note'));
+            var note = this.serializeForm(document.getElementById('note'));
             this.model.setNote(note);
         }else if('delete'=== doWhat){
-            var note = this.model.serializeForm(document.getElementById('note'));
+            var note = this.serializeForm(document.getElementById('note'));
             this.model.deleteNote(note);
         }
         location.hash = "#list";
@@ -133,9 +123,10 @@ const notesController = {
     showMessage: function (string) {
         this.view.renderError(string)
     },
-    setStyle: function (style) {
+    setStyle: function (e) {
 
-        var cssFile,
+        var style = e.target.value,
+            cssFile,
             cssLinkIndex = 0;
 
         if('fancy'===style){
@@ -153,18 +144,22 @@ const notesController = {
 
         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
     },
-    setImportance: function (e) {
-        var newimp = e.target.dataset.index;
-        document.getElementById('importance').value=newimp;
-        this.view.renderImportance(newimp);
-        console.log(newimp);
+    setImportance: function (newimp) {
+        var newImp = newimp,
+            oldImp = document.getElementById('importance').value;
+        if(oldImp===newImp){
+            newImp -=1;
+        }
+        document.getElementById('importance').value=newImp;
+        this.view.renderImportance(newImp);
+        console.log(newImp);
     },
-    setFinished: function (e,newDate) {
+    setFinished: function (e) {
         console.log(e.target.id);
         if(e.target.type === 'checkbox'){
             var date='';
             if(e.target.checked===true){
-                date = this.getDate('',true);
+                date = utils.getDate('',true);
             }
             if(-1<e.target.id.indexOf('_')) {
                 var id = e.target.id.split('_')[1];
@@ -173,6 +168,7 @@ const notesController = {
             this.view.renderFinishedOn(e.target.id,date);
         }else if(e.target.type === 'date'){
   //          console.log('setfin - date')
+            var newDate = e.target.value;
             if(newDate){
                 this.view.renderFinished(true);
             }else{
@@ -180,17 +176,24 @@ const notesController = {
             }
         }
     },
-    getDate: function (delta,reverse) {
-        var delta = delta || 0;
-        var newDate = new Date(Date.now()+delta*1000*3600*24);
-        var dd = ("0"+newDate.getDate()).slice(-2);
-        var mm = ("0"+(newDate.getMonth()+1)).slice(-2);
-        var yyyy = newDate.getFullYear();
+    serializeForm: function (formElement) {
+//        alert(formElement.elements["key"].value);
+        var key = formElement.elements["key"].value || "_undefined",
+            created = formElement.elements["created"].value || new Date(),
+            note = [];
+        note["key"] = key;
+        note["value"] = {
+            "caption": formElement.elements["caption"].value,
+            "description": formElement.elements["description"].value,
+            "summary": formElement.elements["description"].value.substr(0, 15) + '...',
+            "importance": formElement.elements["importance"].value,
+            "due": formElement.elements["due"].value,
+            "created": created,
+            "finished": formElement.elements["finished"].checked,
+            "finishedOn": formElement.elements["finishedOn"].value,
+            "key": key
+        };
 
-        if(reverse){
-            return yyyy+'-'+mm+'-'+dd;
-        }else{
-            return dd+'/'+mm+'/'+yyyy;
-        }
+        return note;
     }
 }
