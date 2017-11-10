@@ -32,6 +32,15 @@ let utils = (function () {
     }
 
 
+    function objectToArray (object) {
+        var array = [];
+        for(var notes in object){
+            array.push(object[notes]);
+        }
+        return array;
+    }
+
+
     return {
         //public if to private function
         isValidDate:isValidDate,
@@ -40,6 +49,7 @@ let utils = (function () {
 
         getNewGuid: guid,
 
+        objectToArray,
     }
 
 

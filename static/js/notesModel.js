@@ -3,21 +3,13 @@
 const notesModel={
     maxImportance: 5,
     setFilters: {},
-    loadNotes: function () {
-        this.notes = JSON.parse(localStorage.getItem('notesData'));
-    },
-    writeNotes: function () {
-        localStorage.setItem('notesData',JSON.stringify(this.notes));
-    },
     setNote: function (note) {
-        var key;
         if (note["key"]==="_undefined"){
-            key = utils.getNewGuid();
-        }else{
-            key = note["key"];
+            note["key"] = utils.getNewGuid();
+            note["value"]["key"]=note["key"];
         }
-        this.notes[key] = note["value"];
-        this.writeNotes();
+        this.notes[note["key"]] = note["value"];
+        storage.write(this.notes);
     },
     setFinished: function (key,date) {
         if(date){
@@ -27,17 +19,17 @@ const notesModel={
             this.notes[key].finished=false;
             this.notes[key].finishedOn='';
         }
-        this.writeNotes();
+        storage.write(this.notes);
     },
     deleteNote: function (note) {
         if (note["key"]!=="_undefined"){
             this.notes[note["key"]] = undefined;
-            this.writeNotes();
-            this.loadNotes();
+            storage.write(this.notes);
+            this.notes=storage.load();
         }
     },
     getNote: function (index) {
-        if(!this.notes)this.loadNotes();
+        if(!this.notes)this.notes=storage.load();
         console.log(this.notes[index]);
         return (index=this.notes[index]);
     },
@@ -55,7 +47,7 @@ const notesModel={
         return note;
     },
     getAllNotes: function (sortBy,filter) {
-        if(!this.notes)this.loadNotes();
+        if(!this.notes)this.notes=storage.load();
         if(sortBy){
             if(this.sortBy && this.sortBy===sortBy) {
                 this.sortBy = undefined;
@@ -91,7 +83,7 @@ const notesModel={
 /*        var array = $.map(this.notes, function(value, index) {
             return [value];
         });*/
-        var array = this.objectToArray(this.notes);
+        var array = utils.objectToArray(this.notes);
         switch(sortBy){
             case 'due':
                 array.sort(function(a,b){
@@ -123,13 +115,6 @@ const notesModel={
                     return 0;
                 });
                 break;
-        }
-        return array;
-    },
-    objectToArray: function (object) {
-        var array = [];
-        for(var notes in object){
-            array.push(object[notes]);
         }
         return array;
     }
