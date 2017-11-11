@@ -104,7 +104,8 @@ const notesController = {
     list: function (sortBy,filter) {
         var notesData = this.model.getAllNotes(sortBy,filter);
 //        this.view.renderList(this.model.completeProps(notesData));
-        if(1>notesData.length){
+        // notesData.length
+        if(1>Object.keys(notesData).length){
             location.hash = '#add';
         }else {
             this.view.renderPage('list',notesData);

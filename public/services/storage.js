@@ -3,7 +3,8 @@
 let storage = (function () {
 
     function loadNotes () {
-        return JSON.parse(localStorage.getItem('notesData'));
+        var notes = JSON.parse(localStorage.getItem('notesData')) || {};
+        return notes;
     }
 
     function writeNotes (notes) {
