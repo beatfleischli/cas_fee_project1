@@ -1,6 +1,6 @@
 const express = require ('express');
 const router =  express.Router();
-const notes = require('../controller/notesController');
+const notes = require('../controller/indexController');
 
 
 
@@ -20,6 +20,7 @@ function myDummyLogger( options ){
 router.all("/*", myDummyLogger());
 
 router.get("/", notes.showIndex);
+router.get("/public/*", notes.sendRefs);
 router.get("/notes", notes.getAllNotes);
 router.post("/notes", notes.createNote);
 router.get("/notes/:id/", notes.getNote);

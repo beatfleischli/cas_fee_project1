@@ -1,4 +1,5 @@
 'use strict'
+//import {asyncRequest} from '../utils/requests.js';
 
 const notesView = {
     noteTemplates: [],
@@ -7,11 +8,12 @@ const notesView = {
         if(this.noteTemplates[page]){
             this.out.innerHTML = (this.noteTemplates[page])(content);
         }else{
-            loadTemplate('hbs/'+page+'.hbs',(function (template) {
+            restClient.getTemplate(page,this.noteTemplates,this.out,content);
+/*            asyncRequest("GET",'public/hbs/'+page+'.hbs',null,(function (template) {
                 var compiledTemplate = Handlebars.compile(template);
                 this.noteTemplates[page] = compiledTemplate;
                 this.out.innerHTML = compiledTemplate(content);
-            }).bind(this));
+            }).bind(this));*/
         }
     },
     renderError: function (message) {
@@ -26,13 +28,14 @@ const notesView = {
         document.getElementById('finished').checked = checked;
     },
     renderFinishedOn: function (elId,newDate) {
+        var date;
         if("finished"===elId) {
-            var date = document.getElementById('finishedOn').value;
+            date = document.getElementById('finishedOn').value;
             if (!utils.isValidDate(date)) {
                 document.getElementById('finishedOn').value = newDate;
             }
         }else{
-            var date = newDate || '-';
+            date = newDate || '-';
             document.querySelectorAll('[for="'+elId+'"]')[0].innerHTML = "Finished ["+ date + "]";
      //       document.getElementById(elId).innerHTML = "Finished ["+ newDate + "]";
         }

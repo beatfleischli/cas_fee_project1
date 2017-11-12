@@ -1,4 +1,5 @@
 let path = require('path');
+let store = require("../services/notesStore.js");
 
 
 module.exports.showIndex = function(req, res)
@@ -7,15 +8,17 @@ module.exports.showIndex = function(req, res)
     res.sendFile("index.html",  {root: path.join(__dirname , '../public/')})
 };
 
+module.exports.sendRefs = function(req, res)
+{
+    console.log(req.url);
+    res.sendFile(req.url,  {root: path.join(__dirname , '../')})
+};
+
 module.exports.getAllNotes = function(req, res)
 {
-    res.type('text/html');
-    res.write("<html>");
-    res.write("<p>Erfolgreich!</p>");
-    res.write("<p>Ihre order: empty</p>");
-    res.write("<p>Ihre Nummer: 1 !</p>");
-    res.end("</html>");
-//    res.sendFile("index.html",  {root: __dirname + '/public/'})
+    store.all(util.current(req), function (err, notes) {
+        res.json(notes || {});
+    })
 };
 
 module.exports.getNote = function(req, res)
@@ -25,7 +28,16 @@ module.exports.getNote = function(req, res)
 
 module.exports.createNote = function(req, res)
 {
-    res.sendFile("index.html",  {root: __dirname + '/public/'})
+    store.add(req.body.note, function(err, order) {
+        res.json(order);
+    });
+};
+
+module.exports.updateNote = function(req, res)
+{
+    store.all(util.current(req), function (err, notes) {
+        res.json(notes || {});
+    })
 };
 
 module.exports.deleteNote = function(req, res)

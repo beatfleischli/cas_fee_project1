@@ -1,8 +1,8 @@
 <form id="note" onsubmit="return (function(event){return false;})(event);">
     <div class="form_row">
         <div class="schedule"><label for="key">Key</label></div>
-        <div class="description">{{key}}<input type="hidden" id="key" name="title" value="{{key}}"></div>
-        <div class="action"></div>
+        <div class="description">{{key}}<input type="hidden" id="key" name="key" value="{{key}}"></div>
+        <div class="action"><input type="hidden" id="state" name="state" value="{{state}}"></div>
     </div><div class="form_row">
         <div class="schedule"><label for="caption">Title</label></div>
         <div class="description"><input type="text" id="caption" name="title" value="{{caption}}"></div>

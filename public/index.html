@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="./css/fee_p1.css">
+    <link rel="stylesheet" type="text/css" href="public/css/fee_p1.css">
     <title>CAS_FEE_Project01_singlePage</title>
 <!--    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
-    <script src="libs/handlebars-v4.0.10.js"></script>
+    <script src="public/libs/handlebars-v4.0.10.js"></script>
 </head>
 <body>
 <div class="page">
@@ -35,22 +35,23 @@
 
     </main>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="./js/requests.js"></script>
-    <script src="utils/utils.js"></script>
-    <script src="services/storage.js"></script>
-    <script src="./js/notesModel.js"></script>
-    <script src="./js/notesView.js"></script>
-    <script src="./js/notesController.js"></script>
+    <script src="public/utils/requests.js"></script>
+    <script src="public/utils/utils.js"></script>
+    <script src="public/services/restClient.js"></script>
+    <script src="public/services/storage.js"></script>
+    <script src="public/js/notesModel.js"></script>
+    <script src="public/js/notesView.js"></script>
+    <script src="public/js/notesController.js"></script>
 
     <script>
-        window.onload = function () {
+        document.addEventListener("DOMContentLoaded", function () {
             notesController.bootstrap(
                 notesModel,
                 notesView,
                 document.getElementById('aside'),
                 document.getElementById('main')
             )
-        }
+        })
     </script>
     <footer class="foot"></footer>
 </div>

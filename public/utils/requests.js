@@ -1,12 +1,12 @@
 "use strict"
 
-let loadTemplate = function (path,callback) {
+let asyncRequest = function  (method, url, data, callback) {
     var request = new XMLHttpRequest();
 
     request.onload = function () {
         callback(request.responseText);
     };
 
-    request.open("GET",path);
-    request.send(null);
+    request.open(method,url);
+    request.send(data);
 }
