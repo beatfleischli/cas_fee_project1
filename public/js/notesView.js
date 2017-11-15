@@ -8,12 +8,11 @@ const notesView = {
         if(this.noteTemplates[page]){
             this.out.innerHTML = (this.noteTemplates[page])(content);
         }else{
-            restClient.getTemplate(page,this.noteTemplates,this.out,content);
-/*            asyncRequest("GET",'public/hbs/'+page+'.hbs',null,(function (template) {
+            restClient.getTemplate(page,(function (template) {
                 var compiledTemplate = Handlebars.compile(template);
                 this.noteTemplates[page] = compiledTemplate;
                 this.out.innerHTML = compiledTemplate(content);
-            }).bind(this));*/
+            }).bind(this));
         }
     },
     renderError: function (message) {

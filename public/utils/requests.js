@@ -8,5 +8,7 @@ let asyncRequest = function  (method, url, data, callback) {
     };
 
     request.open(method,url);
+    request.setRequestHeader("Content-type", "application/json");
+//    request.setRequestHeader('Accept', 'application/json');
     request.send(data);
 }

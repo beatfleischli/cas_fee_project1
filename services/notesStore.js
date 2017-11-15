@@ -2,49 +2,38 @@ const Datastore = require('nedb');
 const db = new Datastore({ filename: './data/notes.db', autoload: true });
 
 
-function Order(pizzaName, orderedBy)
-{
-    this.orderedBy = orderedBy;
-    this.pizzaName = pizzaName;
-    this.orderDate = new Date();
-    this.state = "OK";
-}
-
-
-function publicAddNote(note, callback)
-{
-//    let order = new Order(pizzaName, orderedBy);
+function publicAdd(note, callback) {
     db.insert(note, function(err, newDoc){
-        console.log(newDoc);
         callback(err, newDoc);
     });
 }
 
 function publicRemove(id,  callback) {
-    db.update({_id: id }, {$set: {"state": "DELETED"}}, {returnUpdatedDocs:true}, function (err, count, doc) {
+    db.update({_id: id }, {$set: {state: "DELETED"}}, {returnUpdatedDocs:true}, function (err, count, doc) {
         callback(err, doc);
     });
 }
 
-function publicGet(id, currentUser, callback)
-{
-    db.findOne({ _id: id, state : true }, function (err, doc) {
+function publicGet(id, callback) {
+    db.findOne({ _id: id, state : "OK" }, function (err, doc) {
         callback( err, doc);
     });
 }
 
-function publicUpdate(id, note, callback)
-{
-    db.findOne({ _id: id }, note , function (err, doc) {
+function publicUpdate(id, note, callback) {
+    db.update({ _id: id }, note , {returnUpdatedDocs:true}, function (err, count, doc) {
+        console.log(count);
         callback( err, doc);
     });
 }
 
-function publicAll(currentUser, callback)
-{
-    db.find({state : true}).sort({ orderDate: -1 }).exec(function (err, docs) {
+function publicAll(req, callback) {
+
+//    db.find({state :"OK"}).sort({ created: -1 }).exec(function (err, docs) {
+    db.find({$not:{state : "DELETED"}}).sort({ created: -1 }).exec(function (err, docs) {
+        console.log(docs.length);
         callback( err, docs);
     });
 }
 
-module.exports = {add : publicAddNote, delete : publicRemove, get : publicGet, all : publicAll};
+module.exports = {add : publicAdd, delete : publicRemove, get : publicGet, all : publicAll, update : publicUpdate};

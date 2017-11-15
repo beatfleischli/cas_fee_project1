@@ -1,31 +1,42 @@
 'use strict'
 
 const notesModel={
-    maxImportance: 5,
-    setFilters: {},
-    setNote: function (note) {
-        if (note["key"]==="_undefined"){
-            note["key"] = utils.getNewGuid();
-            note["value"]["key"]=note["key"];
-        }
-        this.notes[note["key"]] = note["value"];
-        storage.write(this.notes);
-    },
-    setFinished: function (key,date) {
-        if(date){
-            this.notes[key].finished=true;
-            this.notes[key].finishedOn=date;
+    setNote: function (note,callback) {
+        if (note["_id"]===undefined) {
+            restClient.createNote(note, (function (newNote) {
+                newNote = JSON.parse(newNote);
+                this.notes[newNote["_id"]] = newNote;
+                callback();
+            }).bind(this));
         }else{
-            this.notes[key].finished=false;
-            this.notes[key].finishedOn='';
+            restClient.updateNote(note, (function (newNote) {
+                newNote = JSON.parse(newNote);
+                this.notes[newNote["_id"]] = newNote;
+                callback();
+            }).bind(this));
         }
-        storage.write(this.notes);
     },
-    deleteNote: function (note) {
-        if (note["key"]!=="_undefined"){
-            this.notes[note["key"]] = undefined;
-            storage.write(this.notes);
-            this.notes=storage.load();
+    setFinished: function (key,date,callback) {
+        let note = this.notes[key];
+        if(date){
+            note.finished=true;
+            note.finishedOn=date;
+        }else{
+            note.finished=false;
+            note.finishedOn='';
+        }
+        this.setNote(note,callback);
+    },
+    deleteNote: function (note,callback) {
+        if (note["_id"]===undefined) {
+            callback();
+        }else{
+            restClient.deleteNote(note, (function (delNote) {
+                delNote = JSON.parse(delNote);
+                delete this.notes[delNote["_id"]];
+                callback();
+                alert(`The note ${delNote['caption']}'s state has been set to ${delNote['state']}`);
+            }).bind(this));
         }
     },
     getNote: function (index) {
@@ -35,7 +46,7 @@ const notesModel={
     },
     getEmptyNote: function () {
         var note ={
-            caption:'new Note',
+            caption:'New Note',
             created: '',
             description: '',
             due: '',
@@ -46,76 +57,40 @@ const notesModel={
         };
         return note;
     },
-    getAllNotes: function (sortBy,filter) {
-        if(!this.notes)this.notes=storage.load();
-        if(sortBy){
-            if(this.sortBy && this.sortBy===sortBy) {
-                this.sortBy = undefined;
-                return this.sortNotes(sortBy).reverse();
-            }else{
-                this.sortBy = sortBy;
-                return this.sortNotes(sortBy);
-            }
-        }else if(filter){
-            if((filter in this.setFilters) && (this.setFilters[filter]===true)){
-                this.setFilters[filter]=false;
-            }else {
-                this.setFilters[filter]=true;
-                switch (filter) {
-                    case 'finished':
-                        return this.filterByFinished(this.notes);
-                        break;
+    getAllNotes: function (sortBy,filterBy,reverse,callback) {
+        if(!this.notes){
+            restClient.getNotes((function (notes) {
+                notes = JSON.parse(notes);
+                if(0<notes.length) {
+                    this.notes = {};
+                    for (let i = 0; i < notes.length; i++) {
+                        let item = notes[i];
+                        this.notes[item["_id"]] = item;
+                    }
+                }
+                callback (this.notes);
+            }).bind(this));
+        }else{
+            let notesArray = utils.objectToArray(this.notes);
+            if (sortBy) {
+                notesArray.sort(function(a,b){
+                    if (a[sortBy] > b[sortBy]){
+                        return 1;
+                    }else if(a[sortBy] < b[sortBy]){
+                        return -1;
+                    }
+                    return 0;
+                });
+                if (reverse) {
+                    notesArray.reverse();
                 }
             }
-        }
-        return this.notes;
-    },
-    filterByFinished: function (notes) {
-        var newNotes={};
-        for(var note in notes){
-            if(notes[note].finished===true){
-                newNotes[note]=notes[note];
+            if (filterBy) {
+                notesArray = notesArray.filter(function(item){
+                    return item[filterBy]===reverse;
+                })
             }
+            callback(notesArray);
         }
-        return newNotes;
-    },
-    sortNotes: function (sortBy) {
-/*        var array = $.map(this.notes, function(value, index) {
-            return [value];
-        });*/
-        var array = utils.objectToArray(this.notes);
-        switch(sortBy){
-            case 'due':
-                array.sort(function(a,b){
-                    if (a.due > b.due){
-                        return 1;
-                    }else if(a.due < b.due){
-                        return -1;
-                    }
-                    return 0;
-                });
-                break;
-            case 'created':
-                array.sort(function(a,b){
-                    if (a.created > b.created){
-                        return 1;
-                    }else if(a.created < b.created){
-                        return -1;
-                    }
-                    return 0;
-                });
-                break;
-            case 'importance':
-                array.sort(function(a,b){
-                    if (a.importance > b.importance){
-                        return -1;
-                    }else if(a.importance < b.importance){
-                        return 1;
-                    }
-                    return 0;
-                });
-                break;
-        }
-        return array;
     }
 }

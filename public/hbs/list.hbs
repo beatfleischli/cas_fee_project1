@@ -2,8 +2,8 @@
     <article class="note">
         <div class="schedule">
             <div class="due">{{due}}</div>
-            <div class="finished"><input id="finished_{{key}}" type="checkbox" {{{renderFinished finished}}} data-change="setFinished">
-                <label for="finished_{{key}}">Finished{{{renderFinishedOn finishedOn}}}</label></div>
+            <div class="finished"><input id="finished_{{_id}}" type="checkbox" {{{renderFinished finished}}} data-change="setFinished">
+                <label for="finished_{{_id}}">Finished{{{renderFinishedOn finishedOn}}}</label></div>
         </div>
         <div class="description">
             <span>{{caption}}</span>
@@ -14,7 +14,7 @@
             </details>
         </div>
         <div class="action">
-            <button class="edit" data-action="edit" data-key="{{key}}">Edit</button>
+            <button class="edit" data-action="edit" data-key="{{_id}}">Edit</button>
         </div>
     </article>
 {{/each}}

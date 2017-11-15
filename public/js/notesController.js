@@ -1,25 +1,34 @@
 'use strict'
 
 const notesController = {
+    defaultHash : '#list',
+
     eventClick: function (e) {
         var butClass = e.target.classList[0],
             butKey = e.target.dataset.key,
             action = e.target.dataset.action,
             hide = e.target.dataset.hide || false,
-            newHash = '#'+butClass;
+            newHash = '';
 
         console.log(butClass);
         console.log(butKey);
 
         if(action){
-            if(hide){
+            if(hide) {
                 notesController[action](butKey);
+            }else if('_r'===location.hash.slice(-2)){
+                location.hash = notesController.defaultHash;
             }else {
                 var arg = '';
                 if (butKey) {
                     arg = "_" + butKey;
                 }
-                location.hash = "#" + action + arg;
+                newHash = "#" + action + arg;
+                if(location.hash === newHash){
+                    location.hash = newHash + '_r';
+                }else {
+                    location.hash = newHash;
+                }
             }
         }
     },
@@ -50,7 +59,7 @@ const notesController = {
         this.view = view;
   //      this.view.model = this.model;
         this.view.out = mainEl;
-        if(!location.hash ) location.hash = "#list";
+        if(!location.hash ) location.hash = this.defaultHash;
         asideEl.addEventListener('click',notesController.eventClick);
         asideEl.addEventListener('change',notesController.eventChange.bind(this));
         mainEl.addEventListener('click',notesController.eventClick.bind(this));
@@ -65,19 +74,18 @@ const notesController = {
         var params = location.hash.substr(1).split('_');
         var action = params[0];
         var detail = params[1];
+        var extra = params[2];
 
         switch (action) {
             case "edit":
             case "add":
             case "list":
+            case "filter":
             case "sort":
-                this[action](detail);
+                this[action](detail,extra);
                 break;
             case "saveOrCancel":
                 this.saveOrCancel(detail);
-                break;
-            case "filter":
-                this[action](detail);
                 break;
             default:
                 this.showMessage("Action could not be found");
@@ -95,31 +103,39 @@ const notesController = {
         }*/
         this.view.renderPage('edit',note);
     },
-    filter: function(filter) {
-        this.list(false,filter);
-    },
-    sort: function (sort){
-        this.list(sort);
-    },
-    list: function (sortBy,filter) {
-        var notesData = this.model.getAllNotes(sortBy,filter);
-//        this.view.renderList(this.model.completeProps(notesData));
-        // notesData.length
-        if(1>Object.keys(notesData).length){
-            location.hash = '#add';
-        }else {
-            this.view.renderPage('list',notesData);
+    filter: function(filter,reverse) {
+        if (reverse) {
+            this.list('', filter, false);
+        }else{
+            this.list('', filter, true);
         }
+    },
+    sort: function (sort,reverse) {
+        this.list(sort, '', reverse);
+    },
+    list: function (sortBy,filter,reverse) {
+        this.model.getAllNotes(sortBy,filter,reverse,(function(notesData){
+            if(1>Object.keys(notesData).length){
+                location.hash = '#add';
+            }else {
+                this.view.renderPage('list',notesData);
+            }
+        }).bind(this));
     },
     saveOrCancel: function (doWhat) {
         if('save'=== doWhat){
             var note = this.serializeForm(document.getElementById('note'));
-            this.model.setNote(note);
+            this.model.setNote(note,function(){
+                location.hash = "#list";
+            });
         }else if('delete'=== doWhat){
             var note = this.serializeForm(document.getElementById('note'));
-            this.model.deleteNote(note);
+            this.model.deleteNote(note,function(){
+                location.hash = "#list";
+            });
+        }else{
+            location.hash = "#list";
         }
-        location.hash = "#list";
     },
     showMessage: function (string) {
         this.view.renderError(string)
@@ -131,9 +147,9 @@ const notesController = {
             cssLinkIndex = 0;
 
         if('fancy'===style){
-            cssFile = './css/fee_p1_2.css';
+            cssFile = './public/css/fee_p1_2.css';
         }else{
-            cssFile = './css/fee_p1.css';
+            cssFile = './public/css/fee_p1.css';
         }
 
         var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
@@ -164,9 +180,11 @@ const notesController = {
             }
             if(-1<e.target.id.indexOf('_')) {
                 var id = e.target.id.split('_')[1];
-                this.model.setFinished(id, date);
+                this.model.setFinished(id, date,(function () {
+                    this.view.renderFinishedOn(e.target.id,date);
+                }).bind(this));
             }
-            this.view.renderFinishedOn(e.target.id,date);
+
         }else if(e.target.type === 'date'){
   //          console.log('setfin - date')
             var newDate = e.target.value;
@@ -179,11 +197,10 @@ const notesController = {
     },
     serializeForm: function (formElement) {
 //        alert(formElement.elements["key"].value);
-        var key = formElement.elements["key"].value || "_undefined",
+        var id = formElement.elements["_id"].value || undefined,
             created = formElement.elements["created"].value || new Date(),
-            note = [];
-        note["key"] = key;
-        note["value"] = {
+            state = formElement.elements["state"].value || "OK",
+        note = {
             "caption": formElement.elements["caption"].value,
             "description": formElement.elements["description"].value,
             "summary": formElement.elements["description"].value.substr(0, 15) + '...',
@@ -192,7 +209,8 @@ const notesController = {
             "created": created,
             "finished": formElement.elements["finished"].checked,
             "finishedOn": formElement.elements["finishedOn"].value,
-            "key": key
+            "state": state,
+            "_id": id
         };
 
         return note;

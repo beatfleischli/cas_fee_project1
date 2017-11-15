@@ -20,5 +20,8 @@
   },
   "scripts": {
     "start": ""
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.39"
   }
 }

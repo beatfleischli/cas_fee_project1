@@ -16,31 +16,37 @@ module.exports.sendRefs = function(req, res)
 
 module.exports.getAllNotes = function(req, res)
 {
-    store.all(util.current(req), function (err, notes) {
+    store.all(req, function (err, notes) {
         res.json(notes || {});
     })
 };
 
 module.exports.getNote = function(req, res)
 {
-    res.sendFile("index.html",  {root: __dirname + '/public/'})
+    store.get(req.params.id, function (err, note) {
+        res.json(note);
+    })
 };
 
 module.exports.createNote = function(req, res)
 {
-    store.add(req.body.note, function(err, order) {
-        res.json(order);
+    console.log('createNote');
+//    console.log(req);
+    store.add(req.body, function(err, note) {
+        res.json(note);
     });
 };
 
 module.exports.updateNote = function(req, res)
 {
-    store.all(util.current(req), function (err, notes) {
-        res.json(notes || {});
+    store.update(req.params.id, req.body, function (err, note) {
+        res.json(note);
     })
 };
 
 module.exports.deleteNote = function(req, res)
 {
-    res.sendFile("index.html",  {root: __dirname + '/public/'})
+    store.delete(req.params.id, function (err, note) {
+        res.json(note);
+    })
 };
