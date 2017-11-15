@@ -76,20 +76,10 @@ const notesController = {
         var detail = params[1];
         var extra = params[2];
 
-        switch (action) {
-            case "edit":
-            case "add":
-            case "list":
-            case "filter":
-            case "sort":
-                this[action](detail,extra);
-                break;
-            case "saveOrCancel":
-                this.saveOrCancel(detail);
-                break;
-            default:
-                this.showMessage("Action could not be found");
-                break;
+        if (action) {
+            this[action](detail, extra);
+        }else{
+            this.showMessage("Action could not be found");
         }
     },
     add: function () {
@@ -183,6 +173,8 @@ const notesController = {
                 this.model.setFinished(id, date,(function () {
                     this.view.renderFinishedOn(e.target.id,date);
                 }).bind(this));
+            }else{
+                this.view.renderFinishedOn(e.target.id,date);
             }
 
         }else if(e.target.type === 'date'){
