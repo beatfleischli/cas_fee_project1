@@ -51,7 +51,7 @@ const notesView = {
                 index ++;
             }
             while (inactive--) {
-                html += '<span class="" data-action="setImportance" data-hide="true" data-key="'+index+'"></span>';
+                html += '<span class="inactive" data-action="setImportance" data-hide="true" data-key="'+index+'"></span>';
                 index ++;
             }
             return html;

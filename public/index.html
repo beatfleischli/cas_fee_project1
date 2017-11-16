@@ -11,8 +11,9 @@
 <body>
 <div class="page">
     <header class="head"><span>Notes App</span></header>
-    <aside class="menu" id="aside">
-        <div class="menu_row">
+    <nav class="menu" id="aside">
+        <ul class="menu_list">
+        <li class="menu_row">
             <button class="new" data-action="add">New note</button>
             <div><label for="style">Style</label>
                 <select name="design" id="style" data-change="setStyle">
@@ -20,16 +21,17 @@
                     <option value="fancy">Colored</option>
                 </select>
             </div>
-        </div>
-        <div class="menu_row">
+        </li>
+        <li class="menu_row">
              <span>
                 <button class="sort" data-action="sort" data-key="due">By deadline</button>
                 <button class="sort" data-action="sort" data-key="created">By creation</button>
                 <button class="sort" data-action="sort" data-key="importance">By importance</button>
              </span>
             <button class="filter" data-action="filter" data-key="finished">Show finished</button>
-        </div>
-    </aside>
+        </li>
+        </ul>
+    </nav>
 
     <main class="main" id="main">
 

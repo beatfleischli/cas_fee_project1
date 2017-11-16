@@ -138,14 +138,16 @@ const notesController = {
         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
     },
     setImportance: function (newimp) {
-        var newImp = newimp,
-            oldImp = document.getElementById('importance').value;
-        if(oldImp===newImp){
-            newImp -=1;
+        if(location.hash !== this.defaultHash){
+            var newImp = newimp,
+                oldImp = document.getElementById('importance').value;
+            if(oldImp===newImp){
+                newImp -=1;
+            }
+            document.getElementById('importance').value=newImp;
+            this.view.renderImportance(newImp);
+            console.log(newImp);
         }
-        document.getElementById('importance').value=newImp;
-        this.view.renderImportance(newImp);
-        console.log(newImp);
     },
     setFinished: function (e) {
         console.log(e.target.id);
@@ -153,6 +155,7 @@ const notesController = {
             var date='';
             if(e.target.checked===true){
                 date = utils.getDate('',true);
+                var test = utils.makeDateHandy(date);
             }
             if(-1<e.target.id.indexOf('_')) {
                 var id = e.target.id.split('_')[1];

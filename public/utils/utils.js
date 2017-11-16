@@ -20,6 +20,39 @@ let utils = (function () {
         }
     }
 
+    function makeDateHandy(date){
+        var today = new Date(),
+            given = date.split('-'),
+            y = today.getFullYear(),
+            m = today.getMonth()+1,
+            d = today.getDate(),
+            result='';
+
+        var diff = parseInt(given[0]) - y;
+
+        switch (diff){
+            default:
+                if(1<diff){
+                    result = `In ${diff} years.`
+                }else{
+                    result = `${diff} years ago.`
+                }
+                break;
+            case -1:
+                break;
+            case 1:
+                break;
+            case 0:
+                diff = parseInt(given[1] - m);
+                switch (diff){
+
+                }
+        }
+
+        alert(diff);
+        return result;
+    }
+
 
     function guid () {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
@@ -50,6 +83,9 @@ let utils = (function () {
         getNewGuid: guid,
 
         objectToArray,
+
+        makeDateHandy,
+
     }
 
 
