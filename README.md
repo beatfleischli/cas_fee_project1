@@ -20,7 +20,7 @@ $ git clone https://github.com/{USERNAME}/cas_fee_project1.git
 $ cd cas_fee_project1
 
 # Zum aktuellen Branch wechseln
-$ git checkout classes
+$ git checkout Abgabe
 
 # Dependencies installieren
 $ npm install
