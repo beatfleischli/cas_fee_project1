@@ -4,12 +4,19 @@
 
 
 ```
-# Repo in eigenen Account forken
+# Voraussetzungen
+-> node.js und npm müssen installiert sein: https://www.npmjs.com
 
-# Clonen
+# Repo in eigenen Account forken
+-> Button 'Fork' oben rechts
+
+# und Clonen
 $ git clone https://github.com/{USERNAME}/cas_fee_project1.git
 
-# In Projektordner wechseln
+# Oder Zip herunterladen
+-> grüner Button 'Clone or download' mitte rechts
+
+# In Projektordner wechseln (-> CLI)
 $ cd cas_fee_project1
 
 # Zum aktuellen Branch wechseln

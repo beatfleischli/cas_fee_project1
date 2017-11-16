@@ -61,8 +61,8 @@ const notesModel={
         if(!this.notes){
             restClient.getNotes((function (notes) {
                 notes = JSON.parse(notes);
+                this.notes = {};
                 if(0<notes.length) {
-                    this.notes = {};
                     for (let i = 0; i < notes.length; i++) {
                         let item = notes[i];
                         this.notes[item["_id"]] = item;

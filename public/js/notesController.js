@@ -45,19 +45,9 @@ const notesController = {
             notesController[change](e);
         }
     },
-    eventPop: function (e){
-        var newHash = location.hash.substr(1).split('_'),
-            butClass = newHash[0],
-            butNewVal = newHash[1];
-
-        console.log(e.state);
-        console.log(window.innerDoClick);
-//        console.log(butNewVal);
-    },
     bootstrap: function (model,view,asideEl,mainEl) {
         this.model = model;
         this.view = view;
-  //      this.view.model = this.model;
         this.view.out = mainEl;
         if(!location.hash ) location.hash = this.defaultHash;
         asideEl.addEventListener('click',notesController.eventClick);
@@ -65,7 +55,6 @@ const notesController = {
         mainEl.addEventListener('click',notesController.eventClick.bind(this));
         mainEl.addEventListener('change',notesController.eventChange.bind(this));
         window.addEventListener("hashchange",notesController.dispatch.bind(this));
-//        window.addEventListener("popstate",notesController.eventPop.bind(this));
         this.view.init();
 
         this.dispatch();
@@ -88,9 +77,6 @@ const notesController = {
     },
     edit: function (key) {
         var note = this.model.getNote(key);
-/*        if(note.key==="_undefined"){
-            note.key = key;
-        }*/
         this.view.renderPage('edit',note);
     },
     filter: function(filter,reverse) {
@@ -178,7 +164,6 @@ const notesController = {
             }
 
         }else if(e.target.type === 'date'){
-  //          console.log('setfin - date')
             var newDate = e.target.value;
             if(newDate){
                 this.view.renderFinished(true);
@@ -188,7 +173,6 @@ const notesController = {
         }
     },
     serializeForm: function (formElement) {
-//        alert(formElement.elements["key"].value);
         var id = formElement.elements["_id"].value || undefined,
             created = formElement.elements["created"].value || new Date(),
             state = formElement.elements["state"].value || "OK",
