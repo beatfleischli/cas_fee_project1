@@ -2,6 +2,7 @@ const Datastore = require('nedb');
 const db = new Datastore({ filename: './data/notes.db', autoload: true });
 
 
+
 function publicAdd(note, callback) {
     db.insert(note, function(err, newDoc){
         callback(err, newDoc);

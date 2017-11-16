@@ -2,7 +2,6 @@ const express = require ('express');
 const router =  express.Router();
 const notes = require('../controller/indexController');
 
-
 router.get("/", notes.showIndex);
 router.get("/public/*", notes.sendRefs);
 router.get("/notes", notes.getAllNotes);

@@ -3,6 +3,7 @@ import model from "./notesModel.js"
 import view from "./notesView.js"
 import utils from "../utils/utils.js"
 
+
 ;(function (ns) {
     ns.defaultHash = '#list';
     let asideEl = null;

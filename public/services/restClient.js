@@ -1,9 +1,7 @@
 import request from "../utils/requests.js"
 
 
-
 class RestClient {
-
 
     getTemplate (page,callback) {
         request.asyncRequest("GET",'public/hbs/'+page+'.hbs',null,callback);
@@ -24,7 +22,6 @@ class RestClient {
     deleteNote(note,callback){
         request.asyncRequest("DELETE",`/notes/${note['_id']}`,'',callback);
     }
-
 
 }
 

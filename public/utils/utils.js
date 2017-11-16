@@ -116,7 +116,6 @@ let utils = (function () {
 
     }
 
-
 }());
 
 export default utils;

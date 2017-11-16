@@ -2,6 +2,7 @@ import restClient from "../services/restClient.js"
 import  utils from "../utils/utils.js"
 
 
+
 class NotesManager{
     setNote (note,callback) {
         if (note["_id"]===undefined) {

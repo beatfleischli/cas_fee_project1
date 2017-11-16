@@ -8,6 +8,7 @@ class Requests {
             callback(request.responseText);
         };
 
+
         request.open(method,url);
         request.setRequestHeader("Content-type", "application/json");
         request.send(data);

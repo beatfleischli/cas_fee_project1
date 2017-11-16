@@ -2,6 +2,7 @@ let path = require('path');
 let store = require("../services/notesStore.js");
 
 
+
 module.exports.showIndex = function(req, res)
 {
     res.sendFile("index.html",  {root: path.join(__dirname , '../public/')})

@@ -1,6 +1,7 @@
 import restClient from "../services/restClient.js"
 import x from "../utils/handlebarHelpers.js"   // call to register Helpers, x is never used
 
+
 class NotesViewManager {
 
     constructor (){
