@@ -1,36 +1,31 @@
+import request from "../utils/requests.js"
 
 
-let restClient = (function () {
+
+class RestClient {
 
 
-    function getTemplate (page,callback) {
-        asyncRequest("GET",'public/hbs/'+page+'.hbs',null,callback);
+    getTemplate (page,callback) {
+        request.asyncRequest("GET",'public/hbs/'+page+'.hbs',null,callback);
     }
 
-    function getNotes(callback) {
-        asyncRequest("GET",'/notes','',callback);
+    getNotes(callback) {
+        request.asyncRequest("GET",'/notes','',callback);
     }
 
-    function createNote(note,callback){
-        asyncRequest("POST",'/notes',JSON.stringify(note),callback);
+    createNote(note,callback){
+        request.asyncRequest("POST",'/notes',JSON.stringify(note),callback);
     }
 
-    function updateNote(note,callback){
-        asyncRequest("POST",`/notes/${note['_id']}`,JSON.stringify(note),callback);
+    updateNote(note,callback){
+        request.asyncRequest("POST",`/notes/${note['_id']}`,JSON.stringify(note),callback);
     }
 
-    function deleteNote(note,callback){
-        asyncRequest("DELETE",`/notes/${note['_id']}`,'',callback);
-    }
-
-
-    return {
-        getTemplate,
-        getNotes,
-        createNote,
-        updateNote,
-        deleteNote
+    deleteNote(note,callback){
+        request.asyncRequest("DELETE",`/notes/${note['_id']}`,'',callback);
     }
 
 
-}());
+}
+
+export default new RestClient();

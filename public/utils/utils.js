@@ -20,6 +20,67 @@ let utils = (function () {
         }
     }
 
+    function getDayOfWeek(dayNr){
+        let day = 'Someday';
+        switch (dayNr) {
+            case 0:
+                day = "Sunday";
+                break;
+            case 1:
+                day = "Monday";
+                break;
+            case 2:
+                day = "Tuesday";
+                break;
+            case 3:
+                day = "Wednesday";
+                break;
+            case 4:
+                day = "Thursday";
+                break;
+            case 5:
+                day = "Friday";
+                break;
+            case 6:
+                day = "Saturday";
+        }
+
+        return day;
+    }
+
+    function makeDateHandy(date){
+        var today = Math.floor ( new Date() /(1000*3600*24)),
+            oldDate = new Date(date),
+            oldDateNr = oldDate /(1000*3600*24),
+            weekDay = '',
+            result='';
+
+        var diff = (oldDateNr - today);
+
+        switch (diff){
+            case -1:
+                result = 'Yesterday';
+                break;
+            case 1:
+                result = 'Tomorrow';
+                break;
+            case 0:
+                result = 'Today';
+                break;
+            default:
+                if((7>diff)&&(1<diff)){
+                    result = `Next ${getDayOfWeek(oldDate.getDay())}`
+                }else if((-7<diff)&&(-1>diff)){
+                    result = `Last ${getDayOfWeek(oldDate.getDay())}`
+                }else{
+                    result = date;
+                }
+                break;
+        }
+
+        return result;
+    }
+
 
     function guid () {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
@@ -50,7 +111,12 @@ let utils = (function () {
         getNewGuid: guid,
 
         objectToArray,
+
+        makeDateHandy,
+
     }
 
 
 }());
+
+export default utils;
