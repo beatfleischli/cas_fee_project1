@@ -1,26 +1,8 @@
 import restClient from "../services/restClient.js"
 import  utils from "../utils/utils.js"
 
-class Notes {
-    constructor(){
-
-    }
-}
-
 
 class NotesManager{
-/*    constructor(){
-        restClient.getNotes((function (notes) {
-            notes = JSON.parse(notes);
-            this.notes = {};
-            if(0<notes.length) {
-                for (let i = 0; i < notes.length; i++) {
-                    let item = notes[i];
-                    this.notes[item["_id"]] = item;
-                }
-            }
-        }).bind(this));
-    }*/
     setNote (note,callback) {
         if (note["_id"]===undefined) {
             restClient.createNote(note, (function (newNote) {
@@ -65,7 +47,6 @@ class NotesManager{
                 callback(notes[index])
             });
         }else{
-            console.log(this.notes[index]);
             let note = this.notes[index];
             let test = utils.makeDateHandy(note.finishedOn);
             callback(this.notes[index]);

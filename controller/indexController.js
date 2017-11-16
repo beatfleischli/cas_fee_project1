@@ -4,13 +4,11 @@ let store = require("../services/notesStore.js");
 
 module.exports.showIndex = function(req, res)
 {
-    console.log('showIndex');
     res.sendFile("index.html",  {root: path.join(__dirname , '../public/')})
 };
 
 module.exports.sendRefs = function(req, res)
 {
-    console.log(req.url);
     res.sendFile(req.url,  {root: path.join(__dirname , '../')})
 };
 
@@ -30,8 +28,6 @@ module.exports.getNote = function(req, res)
 
 module.exports.createNote = function(req, res)
 {
-    console.log('createNote');
-//    console.log(req);
     store.add(req.body, function(err, note) {
         res.json(note);
     });

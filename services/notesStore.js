@@ -22,7 +22,6 @@ function publicGet(id, callback) {
 
 function publicUpdate(id, note, callback) {
     db.update({ _id: id }, note , {returnUpdatedDocs:true}, function (err, count, doc) {
-        console.log(count);
         callback( err, doc);
     });
 }
@@ -31,7 +30,6 @@ function publicAll(req, callback) {
 
 //    db.find({state :"OK"}).sort({ created: -1 }).exec(function (err, docs) {
     db.find({$not:{state : "DELETED"}}).sort({ created: -1 }).exec(function (err, docs) {
-        console.log(docs.length);
         callback( err, docs);
     });
 }

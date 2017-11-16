@@ -15,9 +15,6 @@ import utils from "../utils/utils.js"
             hide = e.target.dataset.hide || false,
             newHash = '';
 
-        console.log(butClass);
-        console.log(butKey);
-
         if(action){
             if(hide) {
                 notesController[action](butKey);
@@ -43,10 +40,6 @@ import utils from "../utils/utils.js"
             butNewVal = e.target.value,
             change = e.target.dataset.change;
 
-        console.log(butClass);
-        console.log(butNewVal);
-
-
         if(change) {
             notesController[change](e);
         }
@@ -66,7 +59,8 @@ import utils from "../utils/utils.js"
     }
 
     ns.add = function () {
-        let note = model.getEmptyNote();
+        let note = model.constructor.getEmptyNote();
+//        model.getEmptyNote
         view.renderPage('edit',note);
     }
 
@@ -90,7 +84,7 @@ import utils from "../utils/utils.js"
 
     ns.list = function (sortBy,filter,reverse) {
         model.getAllNotes(sortBy,filter,reverse,(function(notesData){
-            if(1>Object.keys(notesData).length){
+            if((1>Object.keys(notesData).length)&&(!filter)){
                 location.hash = '#add';
             }else {
                 view.renderPage('list',notesData);
@@ -141,7 +135,7 @@ import utils from "../utils/utils.js"
     }
 
     ns.setImportance = function (newimp) {
-        if(location.hash.substr(0,location.hash.indexOf('_')) === "#edit"){
+        if((location.hash.substr(0,location.hash.indexOf('_')) === "#edit")||(location.hash==="#add")){
             let newImp = newimp,
                 oldImp = document.getElementById('importance').value;
             if(oldImp===newImp){
@@ -149,21 +143,20 @@ import utils from "../utils/utils.js"
             }
             document.getElementById('importance').value=newImp;
             view.renderImportance(newImp);
-            console.log(newImp);
         }
     }
 
     ns.setFinished = function (e) {
-        console.log(e.target.id);
         if(e.target.type === 'checkbox'){
             let date='';
             if(e.target.checked===true){
                 date = utils.getDate('',true);
-                let test = utils.makeDateHandy(date);
+ //               let dateHandy = utils.makeDateHandy(date);
             }
             if(0<e.target.id.indexOf('_')) {
                 let id = e.target.id.split('_')[1];
                 model.setFinished(id, date,(function () {
+                    if(date)date=utils.makeDateHandy(date);
                     view.renderFinishedOn(e.target.id,date);
                 }).bind(this));
             }else{
@@ -210,7 +203,7 @@ import utils from "../utils/utils.js"
         asideEl = document.getElementById('aside')
         mainEl =  document.getElementById('main')
         view.out = mainEl;
-        if(!location.hash ) location.hash = defaultHash;
+        if(!location.hash ) location.hash = ns.defaultHash;
         asideEl.addEventListener('click',ns.eventClick);
         asideEl.addEventListener('change',ns.eventChange);
         mainEl.addEventListener('click',ns.eventClick);
