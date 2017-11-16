@@ -120,9 +120,9 @@ import utils from "../utils/utils.js"
             cssLinkIndex = 0;
 
         if('fancy'===style){
-            cssFile = './public/css/fee_p1_2.css';
+            cssFile = 'public/css/fee_p1_2.css';
         }else{
-            cssFile = './public/css/fee_p1.css';
+            cssFile = 'public/css/fee_p1.css';
         }
 
         let oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
