@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/gif" href="public/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="public/css/fee_p1.css">
     <title>CAS_FEE_Project01_singlePage</title>
 <!--    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -37,24 +38,14 @@
 
     </main>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="public/utils/requests.js"></script>
-    <script src="public/utils/utils.js"></script>
-    <script src="public/services/restClient.js"></script>
-    <script src="public/services/storage.js"></script>
-    <script src="public/js/notesModel.js"></script>
-    <script src="public/js/notesView.js"></script>
-    <script src="public/js/notesController.js"></script>
+    <script type="module" src="public/js/notesController.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            notesController.bootstrap(
-                notesModel,
-                notesView,
-                document.getElementById('aside'),
-                document.getElementById('main')
-            )
-        })
+        window.onload = function () {
+            notesController.bootstrap()
+        }
     </script>
+
     <footer class="foot"></footer>
 </div>
 

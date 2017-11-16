@@ -20,36 +20,64 @@ let utils = (function () {
         }
     }
 
-    function makeDateHandy(date){
-        var today = new Date(),
-            given = date.split('-'),
-            y = today.getFullYear(),
-            m = today.getMonth()+1,
-            d = today.getDate(),
-            result='';
-
-        var diff = parseInt(given[0]) - y;
-
-        switch (diff){
-            default:
-                if(1<diff){
-                    result = `In ${diff} years.`
-                }else{
-                    result = `${diff} years ago.`
-                }
-                break;
-            case -1:
+    function getDayOfWeek(dayNr){
+        let day = 'Someday';
+        switch (dayNr) {
+            case 0:
+                day = "Sunday";
                 break;
             case 1:
+                day = "Monday";
                 break;
-            case 0:
-                diff = parseInt(given[1] - m);
-                switch (diff){
-
-                }
+            case 2:
+                day = "Tuesday";
+                break;
+            case 3:
+                day = "Wednesday";
+                break;
+            case 4:
+                day = "Thursday";
+                break;
+            case 5:
+                day = "Friday";
+                break;
+            case 6:
+                day = "Saturday";
         }
 
-        alert(diff);
+        return day;
+    }
+
+    function makeDateHandy(date){
+        var today = Math.floor ( new Date() /(1000*3600*24)),
+            oldDate = new Date(date),
+            oldDateNr = oldDate /(1000*3600*24),
+            weekDay = '',
+            result='';
+
+        var diff = (oldDateNr - today);
+
+        switch (diff){
+            case -1:
+                result = 'Yesterday';
+                break;
+            case 1:
+                result = 'Tomorrow';
+                break;
+            case 0:
+                result = 'Today';
+                break;
+            default:
+                if((7>diff)&&(1<diff)){
+                    result = `Next ${getDayOfWeek(oldDate.getDay())}`
+                }else if((-7<diff)&&(-1>diff)){
+                    result = `Last ${getDayOfWeek(oldDate.getDay())}`
+                }else{
+                    result = date;
+                }
+                break;
+        }
+
         return result;
     }
 
@@ -90,3 +118,5 @@ let utils = (function () {
 
 
 }());
+
+export default utils;

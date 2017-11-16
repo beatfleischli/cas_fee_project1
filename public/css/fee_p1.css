@@ -5,8 +5,11 @@ body {
     font-size: 80%;
     margin: 0;
 }
-label, .due, {
+label, .due {
     font-size: smaller;
+}
+.due{
+    padding-left: 3px;
 }
 .page{
     background: #eee;
@@ -94,7 +97,7 @@ input, textarea{
 input[type="checkbox"][data-change="setFinished"]{
     float: left;
     width: 10%;
-    margin: 1px 0 0 -2px;
+    margin: 2px 0 0 -1px;
 }
 input#due{
     width: 120px;

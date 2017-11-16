@@ -1,10 +1,15 @@
 'use strict'
+import model from "./notesModel.js"
+import view from "./notesView.js"
+import utils from "../utils/utils.js"
 
-const notesController = {
-    defaultHash : '#list',
+;(function (ns) {
+    ns.defaultHash = '#list';
+    let asideEl = null;
+    let mainEl = null;
 
-    eventClick: function (e) {
-        var butClass = e.target.classList[0],
+    ns.eventClick = function (e) {
+        let butClass = e.target.classList[0],
             butKey = e.target.dataset.key,
             action = e.target.dataset.action,
             hide = e.target.dataset.hide || false,
@@ -19,7 +24,7 @@ const notesController = {
             }else if('_r'===location.hash.slice(-2)){
                 location.hash = notesController.defaultHash;
             }else {
-                var arg = '';
+                let arg = '';
                 if (butKey) {
                     arg = "_" + butKey;
                 }
@@ -31,9 +36,10 @@ const notesController = {
                 }
             }
         }
-    },
-    eventChange: function (e) {
-        var butClass = e.target.classList[0],
+    }
+
+    ns.eventChange = function (e) {
+        let butClass = e.target.classList[0],
             butNewVal = e.target.value,
             change = e.target.dataset.change;
 
@@ -44,81 +50,77 @@ const notesController = {
         if(change) {
             notesController[change](e);
         }
-    },
-    bootstrap: function (model,view,asideEl,mainEl) {
-        this.model = model;
-        this.view = view;
-        this.view.out = mainEl;
-        if(!location.hash ) location.hash = this.defaultHash;
-        asideEl.addEventListener('click',notesController.eventClick);
-        asideEl.addEventListener('change',notesController.eventChange.bind(this));
-        mainEl.addEventListener('click',notesController.eventClick.bind(this));
-        mainEl.addEventListener('change',notesController.eventChange.bind(this));
-        window.addEventListener("hashchange",notesController.dispatch.bind(this));
-        this.view.init();
+    }
 
-        this.dispatch();
-    },
-    dispatch: function () {
-        var params = location.hash.substr(1).split('_');
-        var action = params[0];
-        var detail = params[1];
-        var extra = params[2];
+    ns.dispatch = function () {
+        let params = location.hash.substr(1).split('_');
+        let action = params[0];
+        let detail = params[1];
+        let extra = params[2];
 
-        if (action) {
-            this[action](detail, extra);
+        if (action && ns.hasOwnProperty(action)) {
+            ns[action](detail, extra);
         }else{
-            this.showMessage("Action could not be found");
+            ns.showMessage("Action could not be found");
         }
-    },
-    add: function () {
-        var note = this.model.getEmptyNote();
-        this.view.renderPage('edit',note);
-    },
-    edit: function (key) {
-        var note = this.model.getNote(key);
-        this.view.renderPage('edit',note);
-    },
-    filter: function(filter,reverse) {
+    }
+
+    ns.add = function () {
+        let note = model.getEmptyNote();
+        view.renderPage('edit',note);
+    }
+
+    ns.edit = function (key) {
+        model.getNote(key,function (note) {
+            view.renderPage('edit',note);
+        });
+    }
+
+    ns.filter = function (filter,reverse) {
         if (reverse) {
-            this.list('', filter, false);
+            ns.list('', filter, false);
         }else{
-            this.list('', filter, true);
+            ns.list('', filter, true);
         }
-    },
-    sort: function (sort,reverse) {
-        this.list(sort, '', reverse);
-    },
-    list: function (sortBy,filter,reverse) {
-        this.model.getAllNotes(sortBy,filter,reverse,(function(notesData){
+    }
+
+    ns.sort = function (sort,reverse) {
+        ns.list(sort, '', reverse);
+    }
+
+    ns.list = function (sortBy,filter,reverse) {
+        model.getAllNotes(sortBy,filter,reverse,(function(notesData){
             if(1>Object.keys(notesData).length){
                 location.hash = '#add';
             }else {
-                this.view.renderPage('list',notesData);
+                view.renderPage('list',notesData);
             }
         }).bind(this));
-    },
-    saveOrCancel: function (doWhat) {
+    }
+
+    ns.saveOrCancel = function (doWhat) {
         if('save'=== doWhat){
-            var note = this.serializeForm(document.getElementById('note'));
-            this.model.setNote(note,function(){
+            let note = ns.serializeForm(document.getElementById('note'));
+            model.setNote(note,function(){
                 location.hash = "#list";
             });
         }else if('delete'=== doWhat){
-            var note = this.serializeForm(document.getElementById('note'));
-            this.model.deleteNote(note,function(){
+            let note = ns.serializeForm(document.getElementById('note'));
+            model.deleteNote(note,function(){
                 location.hash = "#list";
             });
         }else{
             location.hash = "#list";
         }
-    },
-    showMessage: function (string) {
-        this.view.renderError(string)
-    },
-    setStyle: function (e) {
+    }
 
-        var style = e.target.value,
+    ns.showMessage = function (string) {
+        view.renderError(string)
+    }
+
+    ns.setStyle = function (e) {
+
+        let style = e.target.value,
             cssFile,
             cssLinkIndex = 0;
 
@@ -128,55 +130,63 @@ const notesController = {
             cssFile = './public/css/fee_p1.css';
         }
 
-        var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+        let oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
 
-        var newlink = document.createElement("link");
+        let newlink = document.createElement("link");
         newlink.setAttribute("rel", "stylesheet");
         newlink.setAttribute("type", "text/css");
         newlink.setAttribute("href", cssFile);
 
         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
-    },
-    setImportance: function (newimp) {
-        if(location.hash !== this.defaultHash){
-            var newImp = newimp,
+    }
+
+    ns.setImportance = function (newimp) {
+        if(location.hash.substr(0,location.hash.indexOf('_')) === "#edit"){
+            let newImp = newimp,
                 oldImp = document.getElementById('importance').value;
             if(oldImp===newImp){
                 newImp -=1;
             }
             document.getElementById('importance').value=newImp;
-            this.view.renderImportance(newImp);
+            view.renderImportance(newImp);
             console.log(newImp);
         }
-    },
-    setFinished: function (e) {
+    }
+
+    ns.setFinished = function (e) {
         console.log(e.target.id);
         if(e.target.type === 'checkbox'){
-            var date='';
+            let date='';
             if(e.target.checked===true){
                 date = utils.getDate('',true);
-                var test = utils.makeDateHandy(date);
+                let test = utils.makeDateHandy(date);
             }
-            if(-1<e.target.id.indexOf('_')) {
-                var id = e.target.id.split('_')[1];
-                this.model.setFinished(id, date,(function () {
-                    this.view.renderFinishedOn(e.target.id,date);
+            if(0<e.target.id.indexOf('_')) {
+                let id = e.target.id.split('_')[1];
+                model.setFinished(id, date,(function () {
+                    view.renderFinishedOn(e.target.id,date);
                 }).bind(this));
             }else{
-                this.view.renderFinishedOn(e.target.id,date);
+                let oldDate = document.getElementById('finishedOn').value;
+                if (utils.isValidDate(oldDate)) {
+                    view.renderFinishedOn(e.target.id,oldDate);
+                }else {
+                    view.renderFinishedOn(e.target.id, date);
+                }
             }
 
         }else if(e.target.type === 'date'){
-            var newDate = e.target.value;
+            let newDate = e.target.value;
             if(newDate){
-                this.view.renderFinished(true);
+                view.renderFinished(true);
             }else{
-                this.view.renderFinished(false);
+                view.renderFinished(false);
             }
         }
-    },
-    serializeForm: function (formElement) {
-        var id = formElement.elements["_id"].value || undefined,
+    }
+
+    ns.serializeForm = function (formElement) {
+        let id = formElement.elements["_id"].value || undefined,
             created = formElement.elements["created"].value || new Date(),
             state = formElement.elements["state"].value || "OK",
         note = {
@@ -194,4 +204,20 @@ const notesController = {
 
         return note;
     }
-}
+
+
+    ns.bootstrap = function () {
+        asideEl = document.getElementById('aside')
+        mainEl =  document.getElementById('main')
+        view.out = mainEl;
+        if(!location.hash ) location.hash = defaultHash;
+        asideEl.addEventListener('click',ns.eventClick);
+        asideEl.addEventListener('change',ns.eventChange);
+        mainEl.addEventListener('click',ns.eventClick);
+        mainEl.addEventListener('change',ns.eventChange);
+        window.addEventListener("hashchange",ns.dispatch);
+
+        ns.dispatch();
+    }
+
+})(window.notesController = window.notesController || {});
